@@ -1036,9 +1036,27 @@
       return canvas.toDataURL("image/png");
     }
 
-    function buildDirectorioURL() {
-      // Apunta a directorio.html en el mismo origen/carpeta que admin.html
-      return window.location.href.replace(/\/[^/]*(\?.*)?$/, "/directorio.html");
+    function buildDirectorioURL(churches) {
+      // Codifica las iglesias en la URL para que cualquier dispositivo las vea
+      const base = window.location.href.replace(/\/[^/]*(\?.*)?$/, "/directorio.html");
+      if (!churches || !churches.length) return base;
+      try {
+        // Solo incluir campos necesarios para el directorio (omitir mapsEmbed que es muy pesado)
+        const slim = churches.map(ch => ({
+          id: ch.id, nombre: ch.nombre, alias: ch.alias || "",
+          distrito: ch.distrito || "", pastor: ch.pastor || "",
+          tel: ch.tel || "", calle: ch.calle || "", colonia: ch.colonia || "",
+          cp: ch.cp || "", ciudad: ch.ciudad || "",
+          mapsUrl: ch.mapsUrl || "", horarios: ch.horarios || "",
+          welcome: ch.welcome || "", vRef: ch.vRef || "", vText: ch.vText || "",
+          desc: ch.desc || "", createdAt: ch.createdAt || 0
+        }));
+        const json = JSON.stringify(slim);
+        const encoded = btoa(unescape(encodeURIComponent(json)));
+        return base + "#data=" + encoded;
+      } catch(e) {
+        return base;
+      }
     }
 
     function showQRGeneral() {
@@ -1065,24 +1083,30 @@
         list.appendChild(div);
       });
 
-      // QR apunta a directorio.html (misma carpeta/dominio)
-      const dirUrl = buildDirectorioURL();
+      // QR apunta a directorio.html con datos codificados en la URL
+      const dirUrl = buildDirectorioURL(churches);
       const box   = document.getElementById("qrGeneralCanvas");
       const badge = document.getElementById("qrGeneralBadge");
       box.innerHTML = "";
+      const urlLen = dirUrl.length;
+      const level = urlLen > 1500 ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M;
       try {
         new QRCode(box, {
           text: dirUrl,
           width: 260, height: 260,
           colorDark: "#081534", colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.M
+          correctLevel: level
         });
-        badge.innerHTML =
-          '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">' +
-          '✓ QR listo · Al escanear abre el directorio completo</span>' +
-          '<p style="font-size:10px;color:#45464e;margin-top:8px;text-align:center;word-break:break-all">' + esc(dirUrl) + '</p>';
+        let badgeHtml;
+        if (urlLen <= 2000) {
+          badgeHtml = '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">&#x2713; QR listo &middot; ' + churches.length + ' localidades incluidas</span>';
+        } else {
+          badgeHtml = '<span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">&#x26A0; QR denso &mdash; escanear de cerca</span>';
+        }
+        badge.innerHTML = badgeHtml +
+          '<p style="font-size:10px;color:#45464e;margin-top:8px;text-align:center">(' + urlLen + ' chars &middot; datos codificados en URL)</p>';
       } catch(e) {
-        box.innerHTML = '<p style="padding:1rem;color:#dc2626;font-size:0.8rem">Error generando QR</p>';
+        box.innerHTML = '<p style="padding:1rem;color:#dc2626;font-size:0.8rem">URL demasiado grande para QR.<br>Reduce la descripci&#xF3;n o el vers&#xED;culo de las iglesias.</p>';
       }
 
       showScreen("scQRGeneral");

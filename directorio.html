@@ -196,6 +196,18 @@
   const STORE_KEY = "sq_churches_v3";
 
   function getChurches() {
+    // 1) Leer desde la URL (#data=base64) — usado por el QR General
+    try {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith("#data=")) {
+        const encoded = hash.slice(6);
+        const json = decodeURIComponent(escape(atob(encoded)));
+        const parsed = JSON.parse(json);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch(e) { /* ignorar errores de decodificación */ }
+
+    // 2) Respaldo: leer de localStorage (cuando se abre localmente)
     try { return JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); }
     catch { return []; }
   }
