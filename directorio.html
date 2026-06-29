@@ -3,279 +3,200 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Directorio de Localidades · Distrito 6</title>
+  <title>Directorio de Localidades | Iglesia de Dios (7° día)</title>
   <meta name="robots" content="noindex, nofollow"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --navy:    #081534;
-      --navy-md: #1e2a4a;
-      --gold:    #c8a84b;
-      --gold-lt: rgba(200,168,75,0.12);
-      --bg:      #f8fafc;
-      --card:    #ffffff;
-      --border:  #e5e7eb;
-      --text:    #111c2c;
-      --muted:   #6b7280;
-      --radius:  14px;
-      --shadow:  0 2px 16px rgba(8,21,52,0.07);
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy:        "#081534",
+            "navy-mid":  "#1e2a4a",
+            "navy-lt":   "#2d3f6e",
+            gold:        "#c8a84b",
+            "gold-dim":  "#a8882e",
+            "gold-bg":   "#fffbeb",
+            "gold-soft": "rgba(200,168,75,0.12)",
+            "surface":   "#f9f9ff",
+            "surf-lo":   "#f0f3ff",
+            "surf-card": "#ffffff",
+            "outline-v": "#e5e7eb",
+            "on-surf":   "#111c2c",
+            "muted":     "#6b7280",
+          },
+          fontFamily: {
+            sans:      ["Manrope", "system-ui", "sans-serif"],
+            label:     ["Inter", "system-ui", "sans-serif"],
+          },
+          maxWidth: { content: "1200px" }
+        }
+      }
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+  </script>
+  <style>
+    .msym { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .msym-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+    /* ── TRUE MASONRY ─── */
+    .masonry { columns: 2; column-gap: 12px; }
+    @media (min-width: 640px)  { .masonry { columns: 2; column-gap: 20px; } }
+    @media (min-width: 1024px) { .masonry { columns: 3; } }
+    @media (min-width: 1280px) { .masonry { columns: 4; } }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      display: inline-block;
+      width: 100%;
+    }
+    @media (min-width: 640px) {
+      .masonry-item { margin-bottom: 20px; }
     }
 
-    /* ── HERO ─────────────────────────────────────────────── */
-    .hero {
-      background: linear-gradient(155deg, #060e21 0%, #0d1626 45%, #1e2a4a 80%, #2d3f6e 100%);
-      color: white;
-      text-align: center;
-      padding: 2.8rem 1.5rem 3.8rem;
-      position: relative;
-    }
-    .hero::after {
+    /* ── HERO WAVE ────── */
+    .hero-wave::after {
       content: '';
       position: absolute;
       bottom: -1px; left: 0; right: 0;
-      height: 40px;
-      background: var(--bg);
-      clip-path: ellipse(56% 100% at 50% 100%);
-    }
-    .hero-ring {
-      width: 62px; height: 62px;
-      background: rgba(200,168,75,0.15);
-      border: 2px solid rgba(200,168,75,0.45);
-      border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 1.8rem;
-      margin-bottom: 1.1rem;
-    }
-    .hero h1 {
-      font-size: 1.6rem; font-weight: 800;
-      margin-bottom: 0.2rem; line-height: 1.2;
-    }
-    .hero-sub  { font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-bottom: 0.55rem; }
-    .hero-badge {
-      display: inline-block;
-      background: var(--gold); color: var(--navy);
-      font-size: 0.7rem; font-weight: 700;
-      padding: 3px 12px; border-radius: 20px;
+      height: 48px;
+      background: #f9f9ff;
+      clip-path: ellipse(60% 100% at 50% 100%);
     }
 
-    /* ── CONTENIDO ────────────────────────────────────────── */
-    .content {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1.8rem 1rem 5rem;
-    }
-
-    /* ── BUSCADOR ─────────────────────────────────────────── */
-    .search-wrap {
-      position: relative; margin-bottom: 0.75rem;
-    }
-    .search-wrap input {
-      width: 100%; height: 48px;
-      padding: 0 1rem 0 3rem;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      font-family: inherit; font-size: 0.9rem;
-      background: white; color: var(--text);
-      outline: none;
-      box-shadow: 0 1px 4px rgba(8,21,52,0.04);
-      transition: border-color .15s, box-shadow .15s;
-    }
-    .search-wrap input:focus {
-      border-color: var(--navy);
-      box-shadow: 0 0 0 3px rgba(8,21,52,0.07);
-    }
-    .search-icon {
-      position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
-      font-size: 1.05rem; color: var(--muted); pointer-events: none;
-    }
-    .count-bar {
-      font-size: 0.75rem; color: var(--muted);
-      margin-bottom: 1.2rem; padding-left: 2px;
-    }
-
-    /* ── GRID MASONRY SIMULADO ────────────────────────────── */
-    /*
-      Patrón de columnas por fila (3-2-3 / 2-3-2 / 1-2-3...):
-      Usamos CSS grid auto-fill con cards de anchos variables
-      via span. En mobile siempre 1 col.
-    */
-    .church-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 0.85rem;
-    }
-
-    /* Patrón alternado: filas de 3 (span 2 c/u) y filas de 2 (span 3 c/u) */
-    /* Fila tipo A → 3 tarjetas */
-    .church-grid .card-wrap.type-a { grid-column: span 2; }
-    /* Fila tipo B → 2 tarjetas */
-    .church-grid .card-wrap.type-b { grid-column: span 3; }
-
-    @media (max-width: 640px) {
-      .church-grid { grid-template-columns: 1fr; }
-      .church-grid .card-wrap { grid-column: span 1 !important; }
-    }
-
-    /* ── TARJETA ──────────────────────────────────────────── */
+    /* ── CARD ─────────── */
     .church-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      border-top: 3px solid var(--gold);
-      box-shadow: var(--shadow);
-      padding: 1.25rem 1.15rem 1.1rem;
-      text-decoration: none; color: inherit; display: flex;
-      flex-direction: column; gap: 0.55rem;
-      height: 100%;
-      transition: box-shadow .18s, transform .18s;
-      position: relative; overflow: hidden;
-    }
-    .church-card::before {
-      content: '';
-      position: absolute; top: 0; right: 0;
-      width: 80px; height: 80px;
-      background: radial-gradient(circle at top right, rgba(200,168,75,0.07) 0%, transparent 70%);
-      pointer-events: none;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      border-top: 3px solid #c8a84b;
+      box-shadow: 0 2px 12px rgba(8,21,52,0.06);
+      transition: transform .2s ease, box-shadow .2s ease;
+      overflow: hidden;
     }
     .church-card:hover {
-      box-shadow: 0 8px 28px rgba(8,21,52,0.11);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(8,21,52,0.1);
     }
 
-    /* Número + nombre */
-    .card-top {
-      display: flex; align-items: flex-start; gap: 0.6rem;
-    }
-    .card-num {
-      background: var(--navy); color: white;
-      font-size: 0.65rem; font-weight: 800;
-      padding: 2px 8px; border-radius: 20px;
-      white-space: nowrap; margin-top: 3px; flex-shrink: 0;
-    }
-    .card-names {}
-    .card-name {
-      font-size: 0.95rem; font-weight: 800; color: var(--navy);
-      line-height: 1.25;
-    }
-    .card-alias {
-      font-size: 0.75rem; color: var(--gold); font-weight: 700;
-      margin-top: 1px;
-    }
+    /* ── SEARCH FOCUS ─── */
+    .search-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(8,21,52,0.1); }
 
-    /* Distrito */
-    .card-distrito {
-      font-size: 0.7rem; font-weight: 700; color: var(--gold);
-      display: flex; align-items: center; gap: 0.3rem;
-    }
+    [hidden] { display: none !important; }
 
-    /* Dirección */
-    .card-addr {
-      font-size: 0.78rem; color: var(--muted);
-      line-height: 1.5;
-      display: flex; align-items: flex-start; gap: 0.3rem;
-    }
-    .card-addr-icon { flex-shrink: 0; margin-top: 1px; }
-
-    /* Ciudad */
-    .card-ciudad {
-      font-size: 0.78rem; color: var(--text); font-weight: 600;
-      display: flex; align-items: center; gap: 0.3rem;
-    }
-
-    /* Botón Maps */
-    .card-maps-btn {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: #1a73e8; color: white;
-      font-size: 0.72rem; font-weight: 700;
-      padding: 5px 12px; border-radius: 8px;
-      text-decoration: none;
-      width: fit-content;
-      transition: opacity .15s;
-      margin-top: auto;
-      font-family: inherit;
-    }
-    .card-maps-btn:hover { opacity: 0.88; }
-
-    /* Verso bíblico */
-    .card-verse {
-      border-top: 1px solid var(--border);
-      padding-top: 0.6rem;
-      margin-top: 0.15rem;
-    }
-    .card-verse-ref {
-      font-size: 0.65rem; font-weight: 700; color: var(--gold);
-      text-transform: uppercase; letter-spacing: 0.08em;
-      margin-bottom: 0.25rem;
-    }
-    .card-verse-text {
-      font-size: 0.75rem; color: var(--muted); font-style: italic;
-      line-height: 1.55;
-    }
-
-    /* ── EMPTY ────────────────────────────────────────────── */
-    .empty {
-      text-align: center; padding: 4rem 1rem; color: var(--muted);
-      grid-column: 1 / -1;
-    }
-    .empty .icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
-
-    /* ── FOOTER ───────────────────────────────────────────── */
-    footer {
-      text-align: center; padding: 1.5rem 1rem 2.5rem;
-      font-size: 0.7rem; color: #a8a29e;
-      border-top: 1px solid var(--border);
-      max-width: 900px; margin: 0 auto;
-    }
-
-    /* ── SPINNER ──────────────────────────────────────────── */
-    .spinner {
-      text-align: center; padding: 3rem; color: var(--muted);
-      font-size: 0.9rem; grid-column: 1 / -1;
+    /* ── MOBILE COMPACT STYLES ─── */
+    @media (max-width: 639px) {
+      .card-body { padding: 12px !important; }
+      .card-header { margin-bottom: 12px !important; }
+      .card-title-block { margin-bottom: 12px !important; }
+      .card-title { font-size: 14px !important; line-height: 1.25 !important; }
+      .card-alias { font-size: 11px !important; margin-top: 2px !important; }
+      .card-info { margin-bottom: 12px !important; }
+      .card-info > * + * { margin-top: 6px !important; }
+      .card-info-item { gap: 8px !important; }
+      .card-info-icon { font-size: 15px !important; margin-top: 1px !important; }
+      .card-info-text { font-size: 11px !important; line-height: 1.3 !important; }
+      .card-btn {
+        margin-bottom: 12px !important;
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+        font-size: 11px !important;
+        border-radius: 8px !important;
+      }
+      .card-btn-icon { font-size: 15px !important; }
+      .card-verse-block { padding-top: 8px !important; }
+      .card-verse-ref { font-size: 9px !important; margin-bottom: 4px !important; }
+      .card-verse-text { font-size: 10px !important; line-height: 1.3 !important; }
     }
   </style>
 </head>
-<body>
+<body class="bg-surface font-sans text-on-surf min-h-screen">
 
-  <header class="hero">
-    <div class="hero-ring">⛪</div>
-    <h1>Directorio de Localidades</h1>
-    <div class="hero-sub">Iglesia de Dios (7° día) A.R. · Distrito 6</div>
-    <div class="hero-badge" id="heroBadge">Cargando…</div>
+  <!-- ══ NAVBAR ═══════════════════════════════════════════════════════ -->
+  <header class="bg-navy shadow-md fixed w-full top-0 z-50">
+    <div class="max-w-content mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined msym-fill text-gold text-2xl">church</span>
+        <span class="font-bold text-lg text-gold tracking-tight">Sanctuary QR</span>
+        <span class="hidden sm:inline text-white/40 mx-1">·</span>
+        <span class="hidden sm:inline text-white/60 text-sm font-label">Directorio</span>
+      </div>
+      <div class="text-white/50 text-xs font-label">Iglesia de Dios (7° día) A.R.</div>
+    </div>
   </header>
 
-  <div class="content">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="search" id="searchInput"
-        placeholder="Buscar por nombre, dirección, C.P., número de domicilio…"
-        autocomplete="off"/>
+  <!-- ══ HERO ═════════════════════════════════════════════════════════ -->
+  <section class="bg-navy pt-28 pb-28 text-center px-4 relative overflow-hidden hero-wave">
+    <!-- Fondo decorativo -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+         style="background: radial-gradient(circle at 20% 50%, #c8a84b 0%, transparent 50%), radial-gradient(circle at 80% 20%, #2d3f6e 0%, transparent 50%)"></div>
+    <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
+      <!-- Ícono -->
+      <div class="bg-white/5 border border-gold/25 rounded-full p-4 mb-5">
+        <span class="material-symbols-outlined msym-fill text-gold" style="font-size:3rem">church</span>
+      </div>
+      <!-- Título -->
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 leading-tight">
+        Directorio de Localidades
+      </h1>
+      <p class="text-gold/80 text-sm font-label mb-5">
+        Iglesia de Dios (7° día) A.R. · Distrito 6
+      </p>
+      <!-- Badge dinámico -->
+      <div id="heroBadge"
+           class="inline-flex items-center gap-1.5 bg-gold text-navy px-4 py-1.5 rounded-full text-xs font-bold font-label">
+        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">schedule</span>
+        Cargando…
+      </div>
     </div>
-    <div class="count-bar" id="countBar"></div>
-    <div class="church-grid" id="churchList">
-      <div class="spinner">Cargando localidades…</div>
-    </div>
-  </div>
+  </section>
 
-  <footer>Sanctuary QR · Directorio de Iglesias · Distrito 6 · Jalisco</footer>
+  <!-- ══ BUSCADOR ══════════════════════════════════════════════════════ -->
+  <section class="max-w-content mx-auto px-4 sm:px-6 -mt-10 relative z-20 mb-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="relative group">
+        <span class="material-symbols-outlined msym absolute left-5 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-navy transition-colors" style="font-size:20px">search</span>
+        <input id="searchInput" type="search" autocomplete="off"
+          placeholder="Buscar por nombre, dirección, C.P., número de domicilio…"
+          class="search-input w-full pl-14 pr-5 py-4 rounded-2xl border-none shadow-xl bg-white text-on-surf text-sm font-label placeholder:text-muted/60 transition-all"/>
+      </div>
+      <p id="countBar" class="text-center mt-3 text-muted text-xs font-label"></p>
+    </div>
+  </section>
+
+  <!-- ══ DIRECTORIO ════════════════════════════════════════════════════ -->
+  <main class="max-w-content mx-auto px-4 sm:px-6 pb-24">
+    <div id="churchList" class="masonry">
+      <!-- Spinner inicial -->
+      <div class="masonry-item" id="loadingSpinner">
+        <div class="church-card p-6 flex items-center justify-center gap-3 text-muted text-sm font-label">
+          <span class="material-symbols-outlined msym animate-spin" style="font-size:20px">progress_activity</span>
+          Cargando localidades…
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <footer class="bg-white border-t border-outline-v">
+    <div class="max-w-content mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div>
+        <div class="font-bold text-navy text-sm">Directorio de Localidades</div>
+        <p class="text-muted text-xs mt-0.5">© 2024 Iglesia de Dios (7° día) A.R. · Distrito 6 · Jalisco</p>
+      </div>
+      <div class="text-xs font-label text-muted">Sanctuary QR</div>
+    </div>
+  </footer>
 
   <script>
   "use strict";
 
   const DEFAULT_VREF  = "Mateo 11:28";
   const DEFAULT_VTEXT = "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb";
-
-  // URL del JSON — mismo origen que el HTML publicado en GitHub Pages
-  const JSON_URL = "./churches.json";
+  const JSON_URL      = "./churches.json";
 
   function normalizeChurch(ch) {
-    // Acepta tanto claves cortas (JSON exportado) como claves largas (localStorage legacy)
     if (ch.nombre !== undefined) return ch;
     return {
       nombre:   ch.n  || "",
@@ -295,7 +216,7 @@
   }
 
   async function fetchChurches() {
-    // 1) Intenta cargar churches.json desde el mismo servidor
+    // 1) churches.json (GitHub Pages)
     try {
       const res = await fetch(JSON_URL, { cache: "no-cache" });
       if (res.ok) {
@@ -303,8 +224,7 @@
         if (Array.isArray(data) && data.length) return data.map(normalizeChurch);
       }
     } catch(e) {}
-
-    // 2) Fallback: hash en URL (compatibilidad con versión anterior)
+    // 2) Hash en URL (fallback legacy)
     try {
       const hash = window.location.hash;
       if (hash && hash.startsWith("#data=")) {
@@ -313,13 +233,11 @@
         if (Array.isArray(parsed) && parsed.length) return parsed.map(normalizeChurch);
       }
     } catch(e) {}
-
-    // 3) Fallback: localStorage (desarrollo local)
+    // 3) localStorage (desarrollo local)
     try {
       const local = JSON.parse(localStorage.getItem("sq_churches_v3") || "[]");
       if (local.length) return local.map(normalizeChurch);
     } catch(e) {}
-
     return [];
   }
 
@@ -333,12 +251,72 @@
     return parts ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(parts) : "";
   }
 
-  /* Alterna el tipo de tarjeta en patrón 3-2-3-2... */
-  function getCardType(idx) {
-    // Agrupamos en bloques: 0-2 → tipo A (3 tarjetas), 3-4 → tipo B (2 tarjetas)
-    const blockSize = 5; // 3+2
-    const pos = idx % blockSize;
-    return pos < 3 ? "type-a" : "type-b";
+  function renderCard(ch, i) {
+    const addrFull = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+    const mapsHref = buildMapsURL(ch);
+    const vRef     = ch.vRef  || DEFAULT_VREF;
+    const vText    = ch.vText || DEFAULT_VTEXT;
+
+    return `
+      <div class="masonry-item">
+        <div class="church-card">
+          <div class="p-6 card-body">
+            <!-- Header: número + distrito -->
+            <div class="flex justify-between items-start mb-5 card-header">
+              <span class="bg-navy text-white text-xs font-bold font-label px-3 py-1 rounded-full card-badge">#${i+1}</span>
+              ${ch.distrito ? `
+              <div class="flex items-center gap-1 text-gold text-xs font-bold font-label card-distrito">
+                <span class="material-symbols-outlined msym card-distrito-icon" style="font-size:14px">location_on</span>
+                ${esc(ch.distrito)}
+              </div>` : ''}
+            </div>
+
+            <!-- Nombre -->
+            <div class="mb-5 card-title-block">
+              <h3 class="text-lg font-extrabold text-navy leading-tight card-title">${esc(ch.nombre)}</h3>
+              ${ch.alias ? `<p class="text-gold font-bold text-sm font-label mt-0.5 card-alias">${esc(ch.alias)}</p>` : ''}
+            </div>
+
+            <!-- Info: dirección + ciudad -->
+            <div class="space-y-3 mb-5 card-info">
+              ${addrFull ? `
+              <div class="flex items-start gap-3 card-info-item">
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px">home</span>
+                <span class="text-muted text-sm font-label leading-snug card-info-text">${esc(addrFull)}</span>
+              </div>` : ''}
+              ${ch.ciudad ? `
+              <div class="flex items-center gap-3 card-info-item">
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px">location_city</span>
+                <span class="text-navy font-semibold text-sm font-label card-info-text font-bold">${esc(ch.ciudad)}</span>
+              </div>` : ''}
+              ${ch.pastor ? `
+              <div class="flex items-center gap-3 card-info-item">
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px">person</span>
+                <span class="text-muted text-sm font-label card-info-text">${esc(ch.pastor)}</span>
+              </div>` : ''}
+              ${ch.horarios ? `
+              <div class="flex items-start gap-3 card-info-item">
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px">schedule</span>
+                <span class="text-muted text-sm font-label leading-snug card-info-text">${esc(ch.horarios.replace(/\n/g," · "))}</span>
+              </div>` : ''}
+            </div>
+
+            <!-- Botón Maps -->
+            ${mapsHref ? `
+            <a href="${esc(mapsHref)}" target="_blank" rel="noopener"
+               class="w-full flex items-center justify-center gap-2 bg-[#1a73e8] hover:brightness-95 text-white text-sm font-bold font-label py-2.5 rounded-xl transition-all mb-5 card-btn">
+              <span class="material-symbols-outlined msym-fill card-btn-icon" style="font-size:18px">map</span>
+              Ver en Google Maps
+            </a>` : ''}
+
+            <!-- Versículo -->
+            <div class="border-t border-outline-v pt-4 flex flex-col items-center text-center card-verse-block">
+              <span class="text-gold text-xs font-bold font-label uppercase tracking-widest mb-1.5 card-verse-ref">${esc(vRef)}</span>
+              <p class="italic text-muted text-xs leading-relaxed card-verse-text">${esc(vText)}</p>
+            </div>
+          </div>
+        </div>
+      </div>`;
   }
 
   function renderList(churches) {
@@ -346,66 +324,21 @@
     const countBar  = document.getElementById("countBar");
 
     if (!churches.length) {
-      container.innerHTML =
-        '<div class="empty"><span class="icon">⛪</span>' +
-        '<strong>Sin resultados</strong><br>' +
-        '<span style="font-size:0.85rem">Intenta con otro término de búsqueda.</span></div>';
+      container.innerHTML = `
+        <div class="masonry-item">
+          <div class="church-card p-10 flex flex-col items-center text-center text-muted gap-3">
+            <span class="material-symbols-outlined msym text-5xl">church</span>
+            <strong class="text-on-surf">Sin resultados</strong>
+            <span class="text-sm">Intenta con otro término de búsqueda.</span>
+          </div>
+        </div>`;
       countBar.textContent = "0 localidades";
       return;
     }
 
     countBar.textContent =
-      churches.length + " localidad" + (churches.length !== 1 ? "es" : "");
-
-    container.innerHTML = churches.map((ch, i) => {
-      const addr   = [ch.calle, ch.colonia].filter(Boolean).join(", ");
-      const addrFull = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
-      const mapsHref = buildMapsURL(ch);
-      const vRef   = ch.vRef  || DEFAULT_VREF;
-      const vText  = ch.vText || DEFAULT_VTEXT;
-      const type   = getCardType(i);
-
-      return (
-        '<div class="card-wrap ' + type + '">' +
-          '<div class="church-card">' +
-            /* Número + nombre */
-            '<div class="card-top">' +
-              '<span class="card-num">#' + (i+1) + '</span>' +
-              '<div class="card-names">' +
-                '<div class="card-name">' + esc(ch.nombre) + '</div>' +
-                (ch.alias ? '<div class="card-alias">' + esc(ch.alias) + '</div>' : '') +
-              '</div>' +
-            '</div>' +
-
-            /* Distrito */
-            (ch.distrito
-              ? '<div class="card-distrito">📍 ' + esc(ch.distrito) + '</div>'
-              : '') +
-
-            /* Dirección */
-            (addrFull
-              ? '<div class="card-addr"><span class="card-addr-icon">🏠</span><span>' + esc(addrFull) + '</span></div>'
-              : '') +
-
-            /* Ciudad */
-            (ch.ciudad
-              ? '<div class="card-ciudad">🌆 ' + esc(ch.ciudad) + '</div>'
-              : '') +
-
-            /* Botón Maps */
-            (mapsHref
-              ? '<a class="card-maps-btn" href="' + esc(mapsHref) + '" target="_blank" rel="noopener">📍 Ver en Google Maps</a>'
-              : '') +
-
-            /* Versículo */
-            '<div class="card-verse">' +
-              '<div class="card-verse-ref">' + esc(vRef) + '</div>' +
-              '<div class="card-verse-text">' + esc(vText) + '</div>' +
-            '</div>' +
-          '</div>' +
-        '</div>'
-      );
-    }).join("");
+      churches.length + " localidad" + (churches.length !== 1 ? "es" : "") + " encontradas";
+    container.innerHTML = churches.map(renderCard).join("");
   }
 
   async function init() {
@@ -413,33 +346,39 @@
     const all   = await fetchChurches();
 
     if (!all.length) {
-      badge.textContent = "Sin localidades";
-      badge.style.background = "#f87171";
-      document.getElementById("churchList").innerHTML =
-        '<div class="empty">' +
-          '<span class="icon">⛪</span>' +
-          '<strong>No hay localidades disponibles</strong><br>' +
-          '<span style="font-size:0.85rem">El administrador aún no ha publicado el archivo churches.json.</span>' +
-        '</div>';
+      badge.innerHTML = `
+        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">warning</span>
+        Sin localidades`;
+      badge.classList.remove("bg-gold");
+      badge.classList.add("bg-red-400", "text-white");
+
+      document.getElementById("churchList").innerHTML = `
+        <div class="masonry-item">
+          <div class="church-card p-10 flex flex-col items-center text-center text-muted gap-3">
+            <span class="material-symbols-outlined msym text-5xl">church</span>
+            <strong class="text-on-surf">No hay localidades disponibles</strong>
+            <span class="text-sm">El administrador aún no ha publicado el archivo churches.json.</span>
+          </div>
+        </div>`;
       document.getElementById("countBar").textContent = "";
       return;
     }
 
-    badge.textContent = "Distrito 6 · " + all.length + " localidades";
+    badge.innerHTML = `
+      <span class="material-symbols-outlined msym-fill text-navy" style="font-size:14px">verified</span>
+      Distrito 6 · ${all.length} localidades`;
+
     renderList(all);
 
-    /* Búsqueda por nombre, dirección, C.P. y número de domicilio */
+    // Buscador: nombre, dirección, C.P., número, colonia, ciudad, pastor
     document.getElementById("searchInput").addEventListener("input", function() {
       const q = this.value.trim().toLowerCase();
       if (!q) { renderList(all); return; }
-      const filtered = all.filter(ch => {
-        const haystack = [
-          ch.nombre, ch.alias, ch.ciudad, ch.calle,
-          ch.colonia, ch.cp, ch.pastor, ch.distrito
-        ].filter(Boolean).join(" ").toLowerCase();
-        return haystack.includes(q);
-      });
-      renderList(filtered);
+      renderList(all.filter(ch => {
+        return [ch.nombre, ch.alias, ch.ciudad, ch.calle,
+                ch.colonia, ch.cp, ch.pastor, ch.distrito]
+          .filter(Boolean).join(" ").toLowerCase().includes(q);
+      }));
     });
   }
 
