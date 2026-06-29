@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanctuary QR · Admin</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script id="tw-cfg">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#081534", "primary-c": "#1e2a4a",
+            secondary: "#c8a84b", "secondary-c": "#fdd977",
+            surface: "#f9f9ff", "on-surface": "#111c2c",
+            "on-sv": "#45464e", "outline-v": "#c6c6cf"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: radial-gradient(at 0% 0%, hsla(222, 47%, 11%, 0.05) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(45, 53%, 54%, 0.05) 0, transparent 50%), #f8fafc;
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+    }
+
+    .msym {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    input,
+    select,
+    textarea {
+      background: rgba(255, 255, 255, 0.55) !important;
+      border: 1px solid rgba(8, 21, 52, 0.12) !important;
+      font-family: "Inter", sans-serif;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #081534 !important;
+      box-shadow: 0 0 0 3px rgba(8, 21, 52, 0.07) !important;
+      outline: none !important;
+    }
+
+    .fld-err {
+      border-color: #dc2626 !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .ch-card {
+      transition: box-shadow .15s, transform .15s;
+    }
+
+    .ch-card:hover {
+      box-shadow: 0 8px 24px rgba(31, 38, 135, 0.1);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<body class="text-[#111c2c]">
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════ -->
+  <header class="glass sticky top-0 z-50 border-b border-white/20">
+    <div class="max-w-[1120px] mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-2 font-bold text-xl text-primary">
+        <span class="material-symbols-outlined text-secondary msym"
+          style="font-variation-settings:'FILL' 1;color:#c8a84b">qr_code_2</span>
+        Sanctuary QR
+        <span class="text-[10px] font-bold bg-secondary text-primary px-2 py-0.5 rounded-full ml-1"
+          style="background:#c8a84b;color:#081534">ADMIN</span>
+      </div>
+      <button id="btnLogout"
+        class="hidden text-sm font-semibold text-[#45464e] hover:text-primary border border-[#c6c6cf] px-4 py-2 rounded-lg transition-all"
+        onclick="doLogout()">Cerrar sesion</button>
+    </div>
+  </header>
+
+  <!-- ══ TOAST ════════════════════════════════════════════════════════ -->
+  <div id="toastHost"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[999] flex flex-col gap-2 items-center pointer-events-none"></div>
+
+  <!-- ══ LOGIN ════════════════════════════════════════════════════════ -->
+  <div id="scLogin" class="min-h-[calc(100vh-64px)] flex items-center justify-center p-6">
+    <div class="glass rounded-2xl p-10 w-full max-w-sm text-center">
+      <div class="text-5xl mb-5">&#128274;</div>
+      <h1 class="text-2xl font-bold text-primary mb-1">Acceso Administrador</h1>
+      <p class="text-sm text-[#45464e] mb-6">Ingresa la contrasena para gestionar las localidades.</p>
+      <div id="loginErr" class="hidden text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2 mb-4">
+        Contrasena incorrecta.</div>
+      <input type="password" id="passInput" class="w-full h-12 px-4 rounded-xl text-sm mb-4" placeholder="Contrasena"
+        autocomplete="current-password" />
+      <button onclick="doLogin()"
+        class="w-full h-12 bg-primary text-white font-semibold rounded-xl hover:opacity-90 transition-all"
+        style="background:#081534">Entrar</button>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ════════════════════════════════════════════════════ -->
+  <div id="scDash" class="max-w-[1120px] mx-auto px-6 py-12" hidden>
+    <div class="flex justify-between items-start mb-10 flex-wrap gap-4">
+      <div class="flex items-center gap-4 flex-wrap">
+        <div>
+          <h1 class="text-4xl font-bold text-primary" style="color:#081534">Localidades</h1>
+          <p class="text-[#45464e] mt-1">Iglesia de Dios (7&#186; dia) A.R. &#183; Distrito 6 &#183; Jalisco</p>
+        </div>
+        <button onclick="showQRGeneral()" title="QR General de todas las localidades"
+          class="flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all"
+          style="background:rgba(200,168,75,0.15);border:1.5px solid #c8a84b;color:#081534">
+          <span class="material-symbols-outlined msym text-[20px]" style="color:#c8a84b">qr_code_2</span>QR General
+        </button>
+      </div>
+      <button onclick="showForm(null)"
+        class="bg-primary text-white font-semibold px-6 py-3 rounded-full hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2"
+        style="background:#081534">
+        <span class="material-symbols-outlined msym text-[20px]">add</span>Nueva localidad
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div class="glass rounded-xl p-5" style="border-left:4px solid #c8a84b">
+        <div class="text-3xl font-bold" style="color:#081534" id="stTotal">0</div>
+        <div class="text-sm text-[#45464e] mt-1">Localidades</div>
+      </div>
+      <div class="glass rounded-xl p-5" style="border-left:4px solid rgba(8,21,52,0.2)">
+        <div class="text-3xl font-bold" style="color:#081534" id="stCities">0</div>
+        <div class="text-sm text-[#45464e] mt-1">Ciudades</div>
+      </div>
+      <div class="glass rounded-xl p-5" style="border-left:4px solid rgba(8,21,52,0.2)">
+        <div class="text-2xl font-bold" style="color:#081534" id="stMissions">0</div>
+        <div class="text-sm text-[#45464e] mt-1">Misiones</div>
+      </div>
+      <div class="glass rounded-xl p-5" style="border-left:4px solid rgba(8,21,52,0.2)">
+        <div class="text-sm font-bold" style="color:#081534;line-height:1.3" id="stRecent">&#8212;</div>
+        <div class="text-sm text-[#45464e] mt-1">Ultima agregada</div>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div id="churchList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div id="emptyState" class="md:col-span-2 glass rounded-xl p-12 text-center text-[#45464e]">
+        <span class="text-5xl block mb-4">&#9978;</span>
+        <strong>Sin localidades</strong>
+        <p class="mt-2 text-sm">Presiona <strong>Nueva localidad</strong> para comenzar.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FORMULARIO ═══════════════════════════════════════════════════ -->
+  <div id="scForm" class="max-w-[1120px] mx-auto px-6 py-12" hidden>
+    <div class="flex items-center gap-4 mb-10 flex-wrap">
+      <button onclick="showDash()"
+        class="text-sm font-semibold text-[#45464e] border border-[#c6c6cf] px-4 py-2 rounded-lg hover:text-primary transition-all">&#8592;
+        Regresar</button>
+      <h1 class="text-3xl font-bold text-primary" id="formTitle" style="color:#081534">Nueva localidad</h1>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7 space-y-6">
+        <input type="hidden" id="fId" />
+
+        <!-- Iglesia -->
+        <section class="glass rounded-xl p-8 space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(200,168,75,0.12)">
+              <span class="material-symbols-outlined msym text-sm" style="color:#c8a84b">church</span>
+            </div>
+            <h2 class="font-semibold text-lg" style="color:#081534">Iglesia</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Nombre <span class="text-red-500">*</span></label>
+              <input type="text" id="fNombre" class="w-full h-11 px-4 rounded-xl text-sm"
+                placeholder="Ej: LOMAS DEL PARAISO" maxlength="80" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Nombre del lugar (alias)</label>
+              <input type="text" id="fAlias" class="w-full h-11 px-4 rounded-xl text-sm" placeholder='Ej: «ASAPH»'
+                maxlength="50" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Distrito</label>
+              <input type="text" id="fDistrito" class="w-full h-11 px-4 rounded-xl text-sm" placeholder="Ej: Distrito 6"
+                maxlength="30" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Denominacion</label>
+              <select id="fDenom" class="w-full h-11 px-4 rounded-xl text-sm">
+                <option value="">&#8212; Seleccionar &#8212;</option>
+                <option>Iglesia de Dios (7&#186; dia) A.R.</option>
+                <option>No denominacional</option>
+                <option>Bautista</option>
+                <option>Pentecostal</option>
+                <option>Adventista</option>
+                <option>Presbiteriana</option>
+                <option>Metodista</option>
+                <option>Carismatica</option>
+                <option>Otra</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Pastor / Lider</label>
+              <input type="text" id="fPastor" class="w-full h-11 px-4 rounded-xl text-sm"
+                placeholder="Nombre del pastor" maxlength="60" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Telefono / WhatsApp</label>
+              <input type="tel" id="fTel" class="w-full h-11 px-4 rounded-xl text-sm" placeholder="+52 33 1234 5678"
+                maxlength="25" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Ubicacion -->
+        <section class="glass rounded-xl p-8 space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(200,168,75,0.12)">
+              <span class="material-symbols-outlined msym text-sm" style="color:#c8a84b">location_on</span>
+            </div>
+            <h2 class="font-semibold text-lg" style="color:#081534">Ubicacion</h2>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+              style="color:rgba(8,21,52,0.6)">Calle y numero <span class="text-red-500">*</span></label>
+            <input type="text" id="fCalle" class="w-full h-11 px-4 rounded-xl text-sm"
+              placeholder="Ej: Jose Maria Arroyo No. 14" maxlength="100" />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Colonia / Fraccionamiento</label>
+              <input type="text" id="fColonia" class="w-full h-11 px-4 rounded-xl text-sm"
+                placeholder="Ej: Lomas del Paraiso" maxlength="60" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">C.P.</label>
+              <input type="text" id="fCP" class="w-full h-11 px-4 rounded-xl text-sm" placeholder="44250"
+                maxlength="10" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+              style="color:rgba(8,21,52,0.6)">Ciudad / Municipio <span class="text-red-500">*</span></label>
+            <input type="text" id="fCiudad" class="w-full h-11 px-4 rounded-xl text-sm"
+              placeholder="Ej: Guadalajara, Jalisco" maxlength="60" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+              style="color:rgba(8,21,52,0.6)">Link de Google Maps</label>
+            <input type="url" id="fMaps" class="w-full h-11 px-4 rounded-xl text-sm"
+              placeholder="https://maps.app.goo.gl/..." />
+            <p class="text-xs mt-1 italic" style="color:rgba(8,21,52,0.45)">Google Maps &#8594; Compartir &#8594; Copiar
+              enlace</p>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+              style="color:rgba(8,21,52,0.6)">Embed de Maps (opcional)</label>
+            <textarea id="fEmbed" class="w-full p-3 rounded-xl text-sm resize-none" rows="2"
+              placeholder="Pega aqui el codigo iframe de Google Maps"></textarea>
+            <p class="text-xs mt-1 italic" style="color:rgba(8,21,52,0.45)">Google Maps &#8594; Compartir &#8594;
+              Incorporar un mapa &#8594; Copiar HTML</p>
+          </div>
+        </section>
+
+        <!-- Horarios -->
+        <section class="glass rounded-xl p-8 space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(200,168,75,0.12)">
+              <span class="material-symbols-outlined msym text-sm" style="color:#c8a84b">schedule</span>
+            </div>
+            <h2 class="font-semibold text-lg" style="color:#081534">Horarios de culto</h2>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <label class="text-xs font-semibold uppercase tracking-wide"
+                style="color:rgba(8,21,52,0.6)">Horarios</label>
+              <span class="text-xs" style="color:rgba(8,21,52,0.45)" id="cntH">(0/140)</span>
+            </div>
+            <textarea id="fHorarios" class="w-full p-3 rounded-xl text-sm resize-none" rows="3" maxlength="140"
+              placeholder="Sabado 3:00 PM&#10;Domingo 10:00 AM"></textarea>
+          </div>
+        </section>
+
+        <!-- Header QR -->
+        <section class="glass rounded-xl p-8 space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(200,168,75,0.12)">
+              <span class="material-symbols-outlined msym text-sm" style="color:#c8a84b">format_quote</span>
+            </div>
+            <h2 class="font-semibold text-lg" style="color:#081534">Encabezado del QR</h2>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+              style="color:rgba(8,21,52,0.6)">Mensaje de bienvenida</label>
+            <input type="text" id="fWelcome" class="w-full h-11 px-4 rounded-xl text-sm" maxlength="70" />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wide mb-1.5"
+                style="color:rgba(8,21,52,0.6)">Referencia biblica</label>
+              <input type="text" id="fVRef" class="w-full h-11 px-4 rounded-xl text-sm" placeholder="Mateo 11:28"
+                maxlength="30" />
+            </div>
+            <div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <label class="text-xs font-semibold uppercase tracking-wide"
+                style="color:rgba(8,21,52,0.6)">Versiculo</label>
+              <span class="text-xs" style="color:rgba(8,21,52,0.45)" id="cntV">(0/200)</span>
+            </div>
+            <textarea id="fVText" class="w-full p-3 rounded-xl text-sm resize-none" rows="3" maxlength="200"></textarea>
+          </div>
+        </section>
+
+        <!-- Descripcion -->
+        <section class="glass rounded-xl p-8 space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(200,168,75,0.12)">
+              <span class="material-symbols-outlined msym text-sm" style="color:#c8a84b">description</span>
+            </div>
+            <h2 class="font-semibold text-lg" style="color:#081534">Descripcion breve</h2>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <label class="text-xs font-semibold uppercase tracking-wide"
+                style="color:rgba(8,21,52,0.6)">Descripcion</label>
+              <span class="text-xs" style="color:rgba(8,21,52,0.45)" id="cntD">(0/130)</span>
+            </div>
+            <textarea id="fDesc" class="w-full p-3 rounded-xl text-sm resize-none" rows="3" maxlength="130"
+              placeholder="Breve descripcion de la comunidad..."></textarea>
+          </div>
+        </section>
+
+        <!-- Acciones -->
+        <div class="flex gap-3 justify-end pb-8">
+          <button onclick="showDash()"
+            class="px-6 py-3 rounded-xl border border-[#c6c6cf] text-sm font-semibold text-[#45464e] hover:text-primary transition-all">Cancelar</button>
+          <button onclick="saveChurch()"
+            class="text-white px-8 py-3 rounded-xl font-semibold text-sm hover:opacity-90 hover:-translate-y-0.5 transition-all flex items-center gap-2"
+            style="background:#081534">
+            <span class="material-symbols-outlined msym text-[18px]">save</span>Guardar localidad
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div class="lg:col-span-5">
+        <div class="sticky top-28">
+          <div class="glass rounded-xl p-8 text-center">
+            <p class="text-xs font-semibold uppercase tracking-widest mb-6 text-left" style="color:rgba(8,21,52,0.5)">
+              Vista previa</p>
+            <div
+              class="w-full aspect-square max-w-[260px] mx-auto bg-white rounded-xl p-6 shadow-inner flex items-center justify-center text-5xl"
+              id="formQRPrev">&#10013;</div>
+            <div class="mt-6">
+              <p class="font-bold text-lg" style="color:#081534" id="prevName">Nombre de la iglesia</p>
+              <p class="text-sm text-[#45464e]" id="prevCity">Ciudad, Estado</p>
+              <p class="text-xs font-semibold mt-1" style="color:#c8a84b" id="prevDist"></p>
+              <p class="text-xs text-[#45464e] mt-0.5" id="prevPastor"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ QR GENERAL ════════════════════════════════════════════════ -->
+  <div id="scQRGeneral" class="max-w-[1120px] mx-auto px-6 py-12" hidden>
+    <div class="flex items-center gap-4 mb-10 flex-wrap">
+      <button onclick="showDash()"
+        class="text-sm font-semibold text-[#45464e] border border-[#c6c6cf] px-4 py-2 rounded-lg hover:text-primary transition-all">&#8592;
+        Regresar</button>
+      <h1 class="text-3xl font-bold" style="color:#081534">QR General &mdash; Todas las Localidades</h1>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <!-- Panel izquierdo: QR + acciones -->
+      <div class="glass rounded-xl p-8 flex flex-col items-center gap-6">
+        <p class="text-xs font-semibold uppercase tracking-widest self-start" style="color:rgba(8,21,52,0.5)">Codigo QR
+          General</p>
+        <div id="qrGeneralCanvas" class="bg-white rounded-xl p-3 border" style="border-color:rgba(8,21,52,0.08)"></div>
+        <div id="qrGeneralBadge"></div>
+        <div class="w-full space-y-3">
+          <button onclick="downloadQRGeneral()"
+            class="w-full h-12 text-white font-semibold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+            style="background:#081534">
+            <span class="material-symbols-outlined msym text-[20px]">download</span>Descargar QR General (PNG)
+          </button>
+          <button onclick="downloadDirectorioImg()"
+            class="w-full h-12 font-semibold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+            style="background:#c8a84b;color:#081534">
+            <span class="material-symbols-outlined msym text-[20px]">image</span>Descargar Directorio (IMG)
+          </button>
+          <button onclick="downloadDirectorioHTML()"
+            class="w-full h-12 font-semibold rounded-xl hover:bg-white/50 transition-all flex items-center justify-center gap-2"
+            style="border:1px solid rgba(8,21,52,0.2);color:#081534">
+            <span class="material-symbols-outlined msym text-[20px]">html</span>Exportar Directorio (HTML)
+          </button>
+        </div>
+        <p class="text-xs text-center" style="color:rgba(8,21,52,0.45)">El QR General lleva toda la info
+          embebida.<br>Comparte la imagen PNG directamente.</p>
+      </div>
+
+      <!-- Panel derecho: Vista previa del directorio -->
+      <div class="glass rounded-xl p-6">
+        <p class="text-xs font-semibold uppercase tracking-widest mb-4" style="color:rgba(8,21,52,0.5)">Vista previa del
+          directorio</p>
+        <div id="generalPreviewList" class="space-y-3 max-h-[500px] overflow-y-auto pr-1"></div>
+      </div>
+    </div>
+
+    <!-- Canvas oculto para generar imagen directorio -->
+    <canvas id="directorioCanvas" style="display:none"></canvas>
+  </div>
+
+  <!-- ══ QR VIEW ══════════════════════════════════════════════════════ -->
+  <div id="scQR" class="max-w-[1120px] mx-auto px-6 py-12" hidden>
+    <div class="flex items-center gap-4 mb-10">
+      <button onclick="showDash()"
+        class="text-sm font-semibold text-[#45464e] border border-[#c6c6cf] px-4 py-2 rounded-lg hover:text-primary transition-all">&#8592;
+        Regresar</button>
+      <h1 class="text-3xl font-bold" style="color:#081534">Codigo QR generado</h1>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+      <div class="glass rounded-xl p-8 flex flex-col items-center gap-6">
+        <div id="qrCanvas" class="bg-white rounded-xl p-3 border" style="border-color:rgba(8,21,52,0.08)"></div>
+        <div class="w-full space-y-3">
+          <button onclick="downloadQR()"
+            class="w-full h-12 text-white font-semibold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+            style="background:#081534">
+            <span class="material-symbols-outlined msym text-[20px]">download</span>Descargar PNG
+          </button>
+          <button onclick="copyUrl()"
+            class="w-full h-12 font-semibold rounded-xl hover:bg-white/50 transition-all flex items-center justify-center gap-2"
+            style="border:1px solid rgba(8,21,52,0.2);color:#081534">
+            <span class="material-symbols-outlined msym text-[20px]">content_copy</span>Copiar URL
+          </button>
+          <a id="qrPreviewLink" href="#" target="_blank" rel="noopener"
+            class="w-full h-12 font-semibold rounded-xl hover:bg-white/30 transition-all flex items-center justify-center gap-2"
+            style="border:1px solid rgba(200,168,75,0.5);color:#c8a84b;display:flex;text-decoration:none">
+            <span class="material-symbols-outlined msym text-[20px]">open_in_new</span>Abrir vista previa
+          </a>
+          <button onclick="editCurrent()"
+            class="w-full h-10 text-xs font-semibold rounded-xl hover:text-primary transition-all flex items-center justify-center gap-2"
+            style="border:1px solid #c6c6cf;color:#45464e">
+            <span class="material-symbols-outlined msym text-[16px]">edit</span>Editar esta localidad
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="glass rounded-xl p-6">
+          <p class="text-2xl font-bold" style="color:#081534" id="qrName">&#8212;</p>
+          <p class="text-sm text-[#45464e] mt-1" id="qrAddr">&#8212;</p>
+          <p class="text-xs font-semibold mt-1" style="color:#c8a84b" id="qrDist"></p>
+          <p class="text-xs text-[#45464e] mt-0.5" id="qrPastor"></p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color:rgba(8,21,52,0.5)">URL del codigo
+            QR</p>
+          <div id="qrUrlBox" class="text-xs font-mono rounded-lg p-3 break-all max-h-20 overflow-y-auto leading-relaxed"
+            style="background:rgba(8,21,52,0.04);color:rgba(8,21,52,0.65)"></div>
+          <div id="qrBadge" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ═══ CONFIG ════════════════════════════════════════════════════
+    const PASS = "oscar";
+    const STORE_KEY = "sq_churches_v3";
+    const AUTH_KEY = "sq_auth_v1";
+
+    // ═══ SEMILLA: 8 iglesias de notas.txt ═════════════════════════
+    const SEED = [
+      {
+        id: "s1", nombre: "LOMAS DEL PARAISO", alias: "\u00abASAPH\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "Jos\u00e9 Mar\u00eda Arroyo No. 14 con Jos\u00e9 Mar\u00eda Letena",
+        colonia: "Lomas del Para\u00edso", cp: "44250", ciudad: "Guadalajara, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.",
+        vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000001
+      },
+      {
+        id: "s2", nombre: "GHILARDI", alias: "\u00abMONTE DE LOS OLIVOS\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "Ghilardi No. 319", colonia: "Santa Teresita Sector Hidalgo", cp: "44600",
+        ciudad: "Guadalajara, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000002
+      },
+      {
+        id: "s3", nombre: "ATLAS", alias: "\u00abASAEL\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "R\u00edo Lagos No. 1722", colonia: "Atlas Sector Reforma", cp: "44870",
+        ciudad: "Guadalajara, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000003
+      },
+      {
+        id: "s4", nombre: "CUXPALA", alias: "\u00abMONTE DE LOS OLIVOS\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "Hidalgo No. 30", colonia: "Ejido Cuxpala", cp: "45341",
+        ciudad: "Mpio. de Tala, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000004
+      },
+      {
+        id: "s5", nombre: "TONALA", alias: "\u00abMARANATHA\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "La Barca No. 141", colonia: "Jalisco", cp: "45412",
+        ciudad: "Tonal\u00e1, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000005
+      },
+      {
+        id: "s6", nombre: "MISI\u00d3N EL CASTILLO", alias: "\u00abROSA DE SARON\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "Victoriano Huerta s/n", colonia: "El Castillo", cp: "45685",
+        ciudad: "Mpio. del Salto, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000006
+      },
+      {
+        id: "s7", nombre: "MISI\u00d3N SANTA RITA", alias: "",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "Emiliano Zapata No. 25", colonia: "Santa Rita", cp: "47940",
+        ciudad: "Mpio. de Ayotl\u00e1n, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000007
+      },
+      {
+        id: "s8", nombre: "MISI\u00d3N PUERTO VALLARTA", alias: "\u00abSEGUIDORES DE CRISTO\u00bb",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.", distrito: "Distrito 6", pastor: "", tel: "",
+        calle: "Calle Veracruz No. 775", colonia: "La Floresta", cp: "68240",
+        ciudad: "Puerto Vallarta, Jalisco",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.", vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: "", createdAt: 1718000008
+      }
+    ];
+
+    // ═══ ESTADO ════════════════════════════════════════════════════
+    let currentId = null;
+    let editingId = null;
+    let qrInstance = null;
+
+    // ═══ AUTH ══════════════════════════════════════════════════════
+    const isAuthed = () => sessionStorage.getItem(AUTH_KEY) === "1";
+    const setAuth = v => v ? sessionStorage.setItem(AUTH_KEY, "1") : sessionStorage.removeItem(AUTH_KEY);
+
+    function doLogin() {
+      const val = document.getElementById("passInput").value;
+      const err = document.getElementById("loginErr");
+      if (val === PASS) {
+        setAuth(true);
+        err.classList.add("hidden");
+        document.getElementById("btnLogout").classList.remove("hidden");
+        showDash();
+      } else {
+        err.classList.remove("hidden");
+        document.getElementById("passInput").value = "";
+        document.getElementById("passInput").focus();
+      }
+    }
+    function doLogout() {
+      setAuth(false);
+      document.getElementById("btnLogout").classList.add("hidden");
+      showScreen("scLogin");
+      document.getElementById("passInput").value = "";
+    }
+    document.getElementById("passInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") doLogin();
+    });
+
+    // ═══ DATOS ═════════════════════════════════════════════════════
+    function getChurches() {
+      try { return JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); }
+      catch { return []; }
+    }
+    function saveChurches(arr) { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); }
+    function uid() { return "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+
+    function initSeed() {
+      if (!localStorage.getItem(STORE_KEY)) saveChurches(SEED);
+    }
+
+    // ═══ URL ═══════════════════════════════════════════════════════
+    function buildURL(ch) {
+      const base = window.location.href.replace(/\/[^/]*(\?.*)?$/, "/church.html");
+      const p = new URLSearchParams();
+      const s = (k, v) => { if (v && String(v).trim()) p.set(k, String(v).trim()); };
+      const fullName = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+      s("n", fullName);
+      s("d", [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", "));
+      s("c", ch.ciudad);
+      s("di", ch.distrito);
+      s("pa", ch.pastor);
+      s("t", ch.tel);
+      s("h", ch.horarios);
+      s("a", ch.desc);
+      s("m", ch.mapsUrl);
+      s("e", ch.mapsEmbed);
+      s("w", ch.welcome);
+      s("vr", ch.vRef);
+      s("vt", ch.vText);
+      return base + "#" + p.toString();
+    }
+
+    // ═══ PANTALLAS ═════════════════════════════════════════════════
+    function showScreen(id) {
+      ["scLogin", "scDash", "scForm", "scQR", "scQRGeneral"].forEach(s =>
+        document.getElementById(s).setAttribute("hidden", "")
+      );
+      document.getElementById(id).removeAttribute("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ═══ DASHBOARD ═════════════════════════════════════════════════
+    function showDash() { renderDash(); showScreen("scDash"); }
+
+    function renderDash() {
+      const list = getChurches();
+      document.getElementById("stTotal").textContent = list.length;
+      const cities = new Set(list.map(c => c.ciudad).filter(Boolean));
+      const missions = list.filter(c => c.nombre.toLowerCase().includes("misi")).length;
+      document.getElementById("stCities").textContent = cities.size;
+      document.getElementById("stMissions").textContent = missions;
+      if (list.length) {
+        const last = list[list.length - 1];
+        const n = last.nombre;
+        document.getElementById("stRecent").textContent = n.length > 22 ? n.slice(0, 22) + "\u2026" : n;
+      }
+
+      const container = document.getElementById("churchList");
+      container.querySelectorAll(".ch-card").forEach(el => el.remove());
+      document.getElementById("emptyState").style.display = list.length ? "none" : "";
+
+      list.forEach(ch => {
+        const addr = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+        const city = ch.ciudad || "";
+        const alias = ch.alias ? ' <span style="color:#c8a84b;font-size:0.78rem">' + esc(ch.alias) + "</span>" : "";
+        const div = document.createElement("div");
+        div.className = "ch-card glass rounded-xl p-5";
+        div.style.cssText = "border-left:4px solid rgba(200,168,75,0.45)";
+        div.innerHTML =
+          '<div class="flex items-start gap-3 mb-4">' +
+          '<div class="w-10 h-10 rounded-full flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.3)">\u26EA</div>' +
+          '<div class="flex-1 min-w-0">' +
+          '<p class="font-bold text-sm leading-tight" style="color:#081534">' + esc(ch.nombre) + alias + '</p>' +
+          '<p class="text-xs text-[#45464e] mt-0.5 truncate">' + esc(addr) + '</p>' +
+          '<p class="text-xs text-[#45464e] mt-0.5">' + esc(city) + '</p>' +
+          (ch.distrito ? '<p class="text-xs font-semibold mt-0.5" style="color:#c8a84b">' + esc(ch.distrito) + '</p>' : '') +
+          (ch.pastor ? '<p class="text-xs mt-0.5" style="color:#45464e">\uD83D\uDC64 ' + esc(ch.pastor) + '</p>' : '') +
+          '</div>' +
+          '</div>' +
+          '<div class="flex gap-2 flex-wrap">' +
+          '<button onclick="showQR(\'' + ch.id + '\')" class="flex-1 h-9 text-white text-xs font-semibold rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-1" style="background:#081534;min-width:70px"><span class="material-symbols-outlined msym" style="font-size:14px">qr_code</span>Ver QR</button>' +
+          '<button onclick="showForm(\'' + ch.id + '\')" class="flex-1 h-9 text-xs font-semibold rounded-lg hover:bg-white/50 transition-all flex items-center justify-center gap-1" style="border:1px solid rgba(8,21,52,0.2);color:#081534;min-width:70px"><span class="material-symbols-outlined msym" style="font-size:14px">edit</span>Editar</button>' +
+          '<button onclick="deleteChurch(\'' + ch.id + '\')" class="h-9 px-3 text-xs font-semibold rounded-lg hover:bg-red-50 transition-all flex items-center justify-center" style="border:1px solid #fecaca;color:#dc2626"><span class="material-symbols-outlined msym" style="font-size:14px">delete</span></button>' +
+          '</div>';
+        container.appendChild(div);
+      });
+    }
+
+    // ═══ FORMULARIO ════════════════════════════════════════════════
+    function showForm(id) {
+      editingId = id;
+      document.getElementById("formTitle").textContent = id ? "Editar localidad" : "Nueva localidad";
+      const DEF = {
+        nombre: "", alias: "", distrito: "Distrito 6",
+        denom: "Iglesia de Dios (7\u00ba d\u00eda) A.R.",
+        pastor: "", tel: "", calle: "", colonia: "", cp: "", ciudad: "",
+        mapsUrl: "", mapsEmbed: "", horarios: "",
+        welcome: "Bienvenido a la Iglesia de Dios.",
+        vRef: "Mateo 11:28",
+        vText: "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb",
+        desc: ""
+      };
+      const ch = id ? (getChurches().find(c => c.id === id) || DEF) : DEF;
+      const sv = (fid, val) => { document.getElementById(fid).value = val || ""; };
+      sv("fId", ch.id || "");
+      sv("fNombre", ch.nombre);
+      sv("fAlias", ch.alias);
+      sv("fDistrito", ch.distrito);
+      sv("fDenom", ch.denom);
+      sv("fPastor", ch.pastor);
+      sv("fTel", ch.tel);
+      sv("fCalle", ch.calle);
+      sv("fColonia", ch.colonia);
+      sv("fCP", ch.cp);
+      sv("fCiudad", ch.ciudad);
+      sv("fMaps", ch.mapsUrl);
+      sv("fEmbed", ch.mapsEmbed);
+      sv("fHorarios", ch.horarios);
+      sv("fWelcome", ch.welcome);
+      sv("fVRef", ch.vRef);
+      sv("fVText", ch.vText);
+      sv("fDesc", ch.desc);
+      ["fNombre", "fCalle", "fCiudad"].forEach(f => document.getElementById(f).classList.remove("fld-err"));
+      updateCounters();
+      updatePrev();
+      showScreen("scForm");
+    }
+
+    function updateCounters() {
+      [["fHorarios", "cntH", 140], ["fVText", "cntV", 200], ["fDesc", "cntD", 130]].forEach(([fid, cid, mx]) => {
+        const l = document.getElementById(fid).value.length;
+        document.getElementById(cid).textContent = "(" + l + "/" + mx + ")";
+      });
+    }
+    ["fHorarios", "fVText", "fDesc"].forEach(id =>
+      document.getElementById(id).addEventListener("input", updateCounters)
+    );
+
+    function updatePrev() {
+      const n = document.getElementById("fNombre").value || "Nombre de la iglesia";
+      const a = document.getElementById("fAlias").value;
+      document.getElementById("prevName").textContent = a ? n + " " + a : n;
+      document.getElementById("prevCity").textContent = document.getElementById("fCiudad").value || "Ciudad, Estado";
+      document.getElementById("prevDist").textContent = document.getElementById("fDistrito").value || "";
+      const p = document.getElementById("fPastor").value;
+      document.getElementById("prevPastor").textContent = p ? "\uD83D\uDC64 " + p : "";
+    }
+    ["fNombre", "fAlias", "fCiudad", "fDistrito", "fPastor"].forEach(id =>
+      document.getElementById(id).addEventListener("input", updatePrev)
+    );
+
+    function extractSrc(raw) {
+      if (!raw || !raw.trim()) return "";
+      const m = raw.match(/src=["']([^"']+)["']/i);
+      return m ? m[1] : (raw.startsWith("http") ? raw : "");
+    }
+
+    function saveChurch() {
+      const nombre = document.getElementById("fNombre").value.trim();
+      const calle = document.getElementById("fCalle").value.trim();
+      const ciudad = document.getElementById("fCiudad").value.trim();
+      const tel = document.getElementById("fTel").value.trim();
+      let ok = true;
+      [["fNombre", nombre], ["fCalle", calle], ["fCiudad", ciudad]].forEach(([fid, val]) => {
+        const el = document.getElementById(fid);
+        if (!val) { el.classList.add("fld-err"); ok = false; }
+        else el.classList.remove("fld-err");
+      });
+      if (!ok) { toast("\u26A0 Completa los campos obligatorios (*)"); return; }
+      if (tel && !/^[\d\s+\-().]+$/.test(tel)) {
+        document.getElementById("fTel").classList.add("fld-err");
+        toast("\u26A0 Tel\u00e9fono inv\u00e1lido"); return;
+      } else document.getElementById("fTel").classList.remove("fld-err");
+
+      const churches = getChurches();
+      const id = editingId || uid();
+      const now = Date.now();
+      const ch = {
+        id, nombre,
+        alias: document.getElementById("fAlias").value.trim(),
+        distrito: document.getElementById("fDistrito").value.trim(),
+        denom: document.getElementById("fDenom").value.trim(),
+        pastor: document.getElementById("fPastor").value.trim(),
+        tel, calle,
+        colonia: document.getElementById("fColonia").value.trim(),
+        cp: document.getElementById("fCP").value.trim(),
+        ciudad,
+        mapsUrl: document.getElementById("fMaps").value.trim(),
+        mapsEmbed: extractSrc(document.getElementById("fEmbed").value),
+        horarios: document.getElementById("fHorarios").value.trim(),
+        welcome: document.getElementById("fWelcome").value.trim(),
+        vRef: document.getElementById("fVRef").value.trim(),
+        vText: document.getElementById("fVText").value.trim(),
+        desc: document.getElementById("fDesc").value.trim(),
+        createdAt: editingId
+          ? (churches.find(c => c.id === editingId)?.createdAt || now)
+          : now,
+        updatedAt: now
+      };
+
+      if (editingId) {
+        const idx = churches.findIndex(c => c.id === editingId);
+        idx >= 0 ? churches.splice(idx, 1, ch) : churches.push(ch);
+      } else {
+        churches.push(ch);
+      }
+      saveChurches(churches);
+      toast(editingId ? "\u2713 Localidad actualizada" : "\u2713 Localidad guardada");
+      showQR(id);
+    }
+
+    function deleteChurch(id) {
+      if (!confirm("\u00bfEliminar esta localidad? Esta accion no se puede deshacer.")) return;
+      saveChurches(getChurches().filter(c => c.id !== id));
+      toast("Localidad eliminada");
+      renderDash();
+    }
+
+    // ═══ QR VIEW ══════════════════════════════════════════════════
+    function showQR(id) {
+      currentId = id;
+      const ch = getChurches().find(c => c.id === id);
+      if (!ch) { showDash(); return; }
+
+      const url = buildURL(ch);
+      const addr = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+      const fname = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+
+      document.getElementById("qrName").textContent = fname;
+      document.getElementById("qrAddr").textContent = addr + (ch.ciudad ? "\n" + ch.ciudad : "");
+      document.getElementById("qrDist").textContent = ch.distrito || "";
+      document.getElementById("qrPastor").textContent = ch.pastor ? "\uD83D\uDC64 " + ch.pastor : "";
+      document.getElementById("qrUrlBox").textContent = url;
+      document.getElementById("qrPreviewLink").href = url;
+
+      const len = url.length;
+      const badge = document.getElementById("qrBadge");
+      if (len <= 500)
+        badge.innerHTML = '<span class="inline-block text-xs font-bold px-3 py-1 rounded-full" style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0">\u2713 URL corta (' + len + ' chars) \u2014 QR f\u00e1cil de escanear</span>';
+      else if (len <= 800)
+        badge.innerHTML = '<span class="inline-block text-xs font-bold px-3 py-1 rounded-full" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a">\u26A0 URL media (' + len + ' chars)</span>';
+      else
+        badge.innerHTML = '<span class="inline-block text-xs font-bold px-3 py-1 rounded-full" style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca">\u26A0 URL larga (' + len + ' chars) \u2014 acorta la descripci\u00f3n</span>';
+
+      const box = document.getElementById("qrCanvas");
+      box.innerHTML = "";
+      qrInstance = null;
+      try {
+        qrInstance = new QRCode(box, {
+          text: url, width: 260, height: 260,
+          colorDark: "#081534", colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch {
+        box.innerHTML = '<p style="padding:1.5rem;color:#dc2626;font-size:0.78rem;text-align:center">URL demasiado larga.<br>Reduce la descripci\u00f3n.</p>';
+      }
+      showScreen("scQR");
+    }
+
+    function downloadQR() {
+      const canvas = document.querySelector("#qrCanvas canvas");
+      const img = document.querySelector("#qrCanvas img");
+      const ch = getChurches().find(c => c.id === currentId);
+      const n = ch ? (ch.alias ? ch.nombre + "_" + ch.alias : ch.nombre) : "iglesia";
+      const fname = "QR_" + n.replace(/[^a-z0-9\u00e0-\u00ff]/gi, "_").replace(/_+/g, "_") + ".png";
+      const a = document.createElement("a");
+      a.download = fname;
+      if (canvas) { a.href = canvas.toDataURL("image/png"); a.click(); }
+      else if (img) { a.href = img.src; a.click(); }
+    }
+
+    function copyUrl() {
+      const url = document.getElementById("qrUrlBox").textContent;
+      navigator.clipboard.writeText(url)
+        .then(() => toast("\u2713 URL copiada al portapapeles"))
+        .catch(() => toast("Selecciona la URL manualmente"));
+    }
+
+    function editCurrent() { showForm(currentId); }
+
+    // ═══ QR GENERAL ═══════════════════════════════════════════════
+    function buildGeneralHTML(churches) {
+      const rows = churches.map(ch => {
+        const addr = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+        const name = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+        return `<tr>
+      <td style="padding:10px 12px;font-weight:700;color:#081534;font-size:13px;vertical-align:top;border-bottom:1px solid #e8eaf0">${name}</td>
+      <td style="padding:10px 12px;color:#45464e;font-size:12px;vertical-align:top;border-bottom:1px solid #e8eaf0">${addr || "—"}</td>
+      <td style="padding:10px 12px;color:#45464e;font-size:12px;vertical-align:top;border-bottom:1px solid #e8eaf0">${ch.ciudad || "—"}</td>
+      <td style="padding:10px 12px;color:#45464e;font-size:12px;vertical-align:top;border-bottom:1px solid #e8eaf0">${ch.pastor ? "👤 " + ch.pastor : "—"}</td>
+      <td style="padding:10px 12px;color:#45464e;font-size:12px;vertical-align:top;border-bottom:1px solid #e8eaf0">${ch.horarios ? ch.horarios.replace(/\n/g, "<br>") : "—"}</td>
+    </tr>`;
+      }).join("");
+      return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Directorio de Localidades · Distrito 6</title>
+<style>
+  body{font-family:"Segoe UI",Arial,sans-serif;margin:0;padding:24px;background:#f8fafc;color:#111c2c}
+  h1{color:#081534;font-size:1.6rem;margin-bottom:4px}
+  p{color:#45464e;font-size:0.85rem;margin:0 0 20px}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+  th{background:#081534;color:#fff;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;text-align:left}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#f0f4ff}
+  .badge{display:inline-block;background:#c8a84b;color:#081534;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
+</style>
+</head>
+<body>
+<h1>Directorio de Localidades <span class="badge">Distrito 6</span></h1>
+<p>Iglesia de Dios (7° día) A.R. · Jalisco · ${churches.length} localidades registradas · Generado ${new Date().toLocaleDateString("es-MX", { dateStyle: "long" })}</p>
+<table>
+  <thead><tr>
+    <th>Nombre</th><th>Dirección</th><th>Ciudad</th><th>Pastor</th><th>Horarios</th>
+  </tr></thead>
+  <tbody>${rows}</tbody>
+</table>
+</body></html>`;
+    }
+
+    function buildGeneralQRText(churches) {
+      // Texto compacto para el QR general: nombre + ciudad por iglesia
+      const lines = churches.map((ch, i) => {
+        const name = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+        return (i + 1) + ". " + name + (ch.ciudad ? " | " + ch.ciudad : "");
+      });
+      return "DIRECTORIO LOCALIDADES\nDistrito 6 · Iglesia de Dios (7° día) A.R.\n\n" + lines.join("\n");
+    }
+
+    function renderDirectorioCanvas(churches) {
+      // Dibuja el directorio en el canvas oculto y devuelve el dataURL
+      const CARD_H = 72;
+      const PADDING = 28;
+      const WIDTH = 700;
+      const HEADER = 110;
+      const FOOTER = 50;
+      const totalH = HEADER + churches.length * (CARD_H + 8) + FOOTER + PADDING;
+
+      const canvas = document.getElementById("directorioCanvas");
+      canvas.width = WIDTH;
+      canvas.height = totalH;
+      const ctx = canvas.getContext("2d");
+
+      // Fondo
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(0, 0, WIDTH, totalH);
+
+      // Header bar
+      ctx.fillStyle = "#081534";
+      ctx.fillRect(0, 0, WIDTH, HEADER);
+
+      // Títulos
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 22px Arial";
+      ctx.fillText("Directorio de Localidades", PADDING, 40);
+      ctx.font = "13px Arial";
+      ctx.fillStyle = "#c8a84b";
+      ctx.fillText("Iglesia de Dios (7\u00b0 d\u00eda) A.R.  \u00b7  Distrito 6  \u00b7  Jalisco", PADDING, 62);
+      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.font = "11px Arial";
+      ctx.fillText(churches.length + " localidades registradas  \u00b7  " + new Date().toLocaleDateString("es-MX", { dateStyle: "long" }), PADDING, 82);
+
+      // Línea dorada
+      ctx.fillStyle = "#c8a84b";
+      ctx.fillRect(0, HEADER - 3, WIDTH, 3);
+
+      // Cards
+      churches.forEach((ch, i) => {
+        const y = HEADER + PADDING / 2 + i * (CARD_H + 8);
+        const name = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+        const addr = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+
+        ctx.fillStyle = "#ffffff";
+        roundRect(ctx, PADDING, y, WIDTH - PADDING * 2, CARD_H, 8);
+        ctx.fill();
+
+        ctx.fillStyle = "#c8a84b";
+        roundRect(ctx, PADDING, y, 4, CARD_H, 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#081534";
+        ctx.font = "bold 11px Arial";
+        ctx.fillText("#" + (i + 1), PADDING + 14, y + 22);
+
+        ctx.fillStyle = "#081534";
+        ctx.font = "bold 13px Arial";
+        ctx.fillText(truncate(name, 46), PADDING + 46, y + 22);
+
+        ctx.fillStyle = "#666";
+        ctx.font = "11px Arial";
+        if (addr) ctx.fillText(truncate(addr, 68), PADDING + 46, y + 38);
+
+        const meta = [ch.ciudad, ch.pastor ? "\uD83D\uDC64 " + ch.pastor : "", ch.horarios ? ch.horarios.replace(/\n/g, " \u00b7 ") : ""].filter(Boolean).join("  \u00b7  ");
+        if (meta) {
+          ctx.fillStyle = "#999";
+          ctx.font = "10px Arial";
+          ctx.fillText(truncate(meta, 80), PADDING + 46, y + 54);
+        }
+      });
+
+      // Footer
+      ctx.fillStyle = "#aaa";
+      ctx.font = "10px Arial";
+      ctx.fillText("Generado con Sanctuary QR Admin  \u00b7  Iglesia de Dios (7\u00b0 d\u00eda) A.R.", PADDING, totalH - 18);
+
+      return canvas.toDataURL("image/png");
+    }
+
+    function showQRGeneral() {
+      const churches = getChurches();
+      if (!churches.length) { toast("⚠ No hay localidades registradas"); return; }
+
+      // Renderizar preview lista
+      const list = document.getElementById("generalPreviewList");
+      list.innerHTML = "";
+      churches.forEach((ch, i) => {
+        const addr = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+        const name = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+        const div = document.createElement("div");
+        div.style.cssText = "background:rgba(255,255,255,0.7);border-radius:10px;padding:12px 14px;border-left:3px solid #c8a84b";
+        div.innerHTML =
+          '<div style="display:flex;align-items:center;gap:8px">' +
+          '<span style="background:#081534;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px">' + (i + 1) + '</span>' +
+          '<span style="font-weight:700;font-size:13px;color:#081534">' + esc(name) + '</span>' +
+          '</div>' +
+          (addr ? '<div style="font-size:11px;color:#45464e;margin-top:4px;padding-left:32px">' + esc(addr) + '</div>' : '') +
+          (ch.ciudad ? '<div style="font-size:11px;color:#45464e;padding-left:32px">' + esc(ch.ciudad) + '</div>' : '') +
+          (ch.pastor ? '<div style="font-size:11px;color:#45464e;padding-left:32px">👤 ' + esc(ch.pastor) + '</div>' : '') +
+          (ch.horarios ? '<div style="font-size:11px;color:#c8a84b;font-weight:600;padding-left:32px">' + esc(ch.horarios.replace(/\n/g, " · ")) + '</div>' : '');
+        list.appendChild(div);
+      });
+
+      // Generar imagen del directorio y meter su dataURL en el QR
+      const box = document.getElementById("qrGeneralCanvas");
+      const badge = document.getElementById("qrGeneralBadge");
+      box.innerHTML = "";
+      badge.innerHTML = '<span style="color:#45464e;font-size:12px">Generando imagen…</span>';
+
+      // pequeño timeout para que el DOM pinte antes de bloquear con canvas
+      setTimeout(() => {
+        try {
+          const dataUrl = renderDirectorioCanvas(churches);
+
+          // El QR apunta al dataURL → al escanear abre la imagen directo en el celular
+          new QRCode(box, {
+            text: dataUrl,
+            width: 260, height: 260,
+            colorDark: "#081534", colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.L   // L = menor corrección = más datos caben
+          });
+          badge.innerHTML = '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">✓ QR listo · Al escanear abre la imagen del directorio</span>';
+        } catch (e) {
+          // data URL demasiado grande para QR → mostrar aviso y ofrecer alternativas
+          box.innerHTML =
+            '<div style="padding:1.5rem;text-align:center">' +
+            '<div style="font-size:2.5rem;margin-bottom:8px">🖼️</div>' +
+            '<p style="color:#081534;font-weight:700;font-size:0.9rem;margin:0 0 6px">El directorio es demasiado grande<br>para un solo QR</p>' +
+            '<p style="color:#666;font-size:0.78rem;margin:0">Usa los botones de abajo para<br>descargar la imagen o el HTML.</p>' +
+            '</div>';
+          badge.innerHTML = '<span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">⚠ Descarga la imagen directamente y compártela</span>';
+        }
+      }, 50);
+
+      showScreen("scQRGeneral");
+    }
+
+    function downloadQRGeneral() {
+      const canvas = document.querySelector("#qrGeneralCanvas canvas");
+      const img = document.querySelector("#qrGeneralCanvas img");
+      const a = document.createElement("a");
+      a.download = "QR_General_Localidades_Distrito6.png";
+      if (canvas) { a.href = canvas.toDataURL("image/png"); a.click(); }
+      else if (img) { a.href = img.src; a.click(); }
+      else toast("⚠ QR no disponible — descarga la imagen del directorio directamente");
+    }
+
+    function downloadDirectorioHTML() {
+      const churches = getChurches();
+      const html = buildGeneralHTML(churches);
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.download = "Directorio_Localidades_Distrito6.html";
+      a.href = url;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast("✓ Directorio HTML descargado");
+    }
+
+    function downloadDirectorioImg() {
+      const churches = getChurches();
+      if (!churches.length) { toast("⚠ No hay localidades"); return; }
+      const dataUrl = renderDirectorioCanvas(churches);
+      const a = document.createElement("a");
+      a.download = "Directorio_Localidades_Distrito6.png";
+      a.href = dataUrl;
+      a.click();
+      toast("✓ Imagen directorio descargada");
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function truncate(str, max) {
+      return str.length > max ? str.slice(0, max - 1) + "…" : str;
+    }
+
+    // ═══ UTILS ════════════════════════════════════════════════════
+    function esc(s) {
+      return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+    function toast(msg, ms = 2800) {
+      const host = document.getElementById("toastHost");
+      const el = document.createElement("div");
+      el.style.cssText = "background:#081534;color:white;font-size:0.85rem;font-weight:600;padding:0.6rem 1.2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2)";
+      el.textContent = msg;
+      host.appendChild(el);
+      setTimeout(() => el.remove(), ms);
+    }
+
+    // ═══ BOOT ═════════════════════════════════════════════════════
+    initSeed();
+    if (isAuthed()) {
+      document.getElementById("btnLogout").classList.remove("hidden");
+      showDash();
+    } else {
+      showScreen("scLogin");
+    }
+  </script>
+</body>
+
+</html>
