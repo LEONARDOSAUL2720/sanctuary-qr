@@ -431,8 +431,7 @@
             <span class="material-symbols-outlined msym text-[20px]">html</span>Exportar Directorio (HTML)
           </button>
         </div>
-        <p class="text-xs text-center" style="color:rgba(8,21,52,0.45)">El QR General lleva toda la info
-          embebida.<br>Comparte la imagen PNG directamente.</p>
+        <p class="text-xs text-center" style="color:rgba(8,21,52,0.45)">El QR abre <strong>directorio.html</strong> en GitHub Pages.<br>Los usuarios ven todas las localidades al escanearlo.</p>
       </div>
 
       <!-- Panel derecho: Vista previa del directorio -->
@@ -1037,6 +1036,11 @@
       return canvas.toDataURL("image/png");
     }
 
+    function buildDirectorioURL() {
+      // Apunta a directorio.html en el mismo origen/carpeta que admin.html
+      return window.location.href.replace(/\/[^/]*(\?.*)?$/, "/directorio.html");
+    }
+
     function showQRGeneral() {
       const churches = getChurches();
       if (!churches.length) { toast("⚠ No hay localidades registradas"); return; }
@@ -1061,48 +1065,37 @@
         list.appendChild(div);
       });
 
-      // Generar imagen del directorio y meter su dataURL en el QR
-      const box = document.getElementById("qrGeneralCanvas");
+      // QR apunta a directorio.html (misma carpeta/dominio)
+      const dirUrl = buildDirectorioURL();
+      const box   = document.getElementById("qrGeneralCanvas");
       const badge = document.getElementById("qrGeneralBadge");
       box.innerHTML = "";
-      badge.innerHTML = '<span style="color:#45464e;font-size:12px">Generando imagen…</span>';
-
-      // pequeño timeout para que el DOM pinte antes de bloquear con canvas
-      setTimeout(() => {
-        try {
-          const dataUrl = renderDirectorioCanvas(churches);
-
-          // El QR apunta al dataURL → al escanear abre la imagen directo en el celular
-          new QRCode(box, {
-            text: dataUrl,
-            width: 260, height: 260,
-            colorDark: "#081534", colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.L   // L = menor corrección = más datos caben
-          });
-          badge.innerHTML = '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">✓ QR listo · Al escanear abre la imagen del directorio</span>';
-        } catch (e) {
-          // data URL demasiado grande para QR → mostrar aviso y ofrecer alternativas
-          box.innerHTML =
-            '<div style="padding:1.5rem;text-align:center">' +
-            '<div style="font-size:2.5rem;margin-bottom:8px">🖼️</div>' +
-            '<p style="color:#081534;font-weight:700;font-size:0.9rem;margin:0 0 6px">El directorio es demasiado grande<br>para un solo QR</p>' +
-            '<p style="color:#666;font-size:0.78rem;margin:0">Usa los botones de abajo para<br>descargar la imagen o el HTML.</p>' +
-            '</div>';
-          badge.innerHTML = '<span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">⚠ Descarga la imagen directamente y compártela</span>';
-        }
-      }, 50);
+      try {
+        new QRCode(box, {
+          text: dirUrl,
+          width: 260, height: 260,
+          colorDark: "#081534", colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+        badge.innerHTML =
+          '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">' +
+          '✓ QR listo · Al escanear abre el directorio completo</span>' +
+          '<p style="font-size:10px;color:#45464e;margin-top:8px;text-align:center;word-break:break-all">' + esc(dirUrl) + '</p>';
+      } catch(e) {
+        box.innerHTML = '<p style="padding:1rem;color:#dc2626;font-size:0.8rem">Error generando QR</p>';
+      }
 
       showScreen("scQRGeneral");
     }
 
     function downloadQRGeneral() {
       const canvas = document.querySelector("#qrGeneralCanvas canvas");
-      const img = document.querySelector("#qrGeneralCanvas img");
+      const img    = document.querySelector("#qrGeneralCanvas img");
       const a = document.createElement("a");
       a.download = "QR_General_Localidades_Distrito6.png";
-      if (canvas) { a.href = canvas.toDataURL("image/png"); a.click(); }
+      if (canvas)   { a.href = canvas.toDataURL("image/png"); a.click(); }
       else if (img) { a.href = img.src; a.click(); }
-      else toast("⚠ QR no disponible — descarga la imagen del directorio directamente");
+      else toast("⚠ QR no disponible");
     }
 
     function downloadDirectorioHTML() {

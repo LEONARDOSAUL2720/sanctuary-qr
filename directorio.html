@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Directorio de Localidades · Distrito 6</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:   #081534;
+      --gold:   #c8a84b;
+      --bg:     #f8fafc;
+      --card:   #ffffff;
+      --border: #e5e7eb;
+      --text:   #111c2c;
+      --muted:  #6b7280;
+      --radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(155deg, #0d1626 0%, #1e2a4a 60%, #2d3f6e 100%);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem 3rem;
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 32px;
+      background: var(--bg);
+      clip-path: ellipse(56% 100% at 50% 100%);
+    }
+    .hero-icon {
+      width: 56px; height: 56px;
+      background: rgba(200,168,75,0.15);
+      border: 2px solid rgba(200,168,75,0.45);
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+    .hero h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .hero p  { font-size: 0.82rem; color: rgba(255,255,255,0.65); }
+    .hero-badge {
+      display: inline-block;
+      background: var(--gold); color: var(--navy);
+      font-size: 0.7rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+      margin-top: 0.6rem;
+    }
+
+    /* CONTENIDO */
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* BARRA BÚSQUEDA */
+    .search-wrap {
+      position: relative; margin-bottom: 1.2rem;
+    }
+    .search-wrap input {
+      width: 100%; height: 44px;
+      padding: 0 1rem 0 2.8rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: inherit; font-size: 0.88rem;
+      background: white; color: var(--text);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .search-wrap input:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(8,21,52,0.07);
+    }
+    .search-icon {
+      position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+      font-size: 1rem; color: var(--muted); pointer-events: none;
+    }
+
+    /* CONTADOR */
+    .count-bar {
+      font-size: 0.75rem; color: var(--muted);
+      margin-bottom: 1rem; padding-left: 2px;
+    }
+
+    /* TARJETA IGLESIA */
+    .church-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.15rem;
+      margin-bottom: 0.75rem;
+      transition: box-shadow .15s, transform .15s;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .church-card:hover {
+      box-shadow: 0 6px 20px rgba(8,21,52,0.09);
+      transform: translateY(-1px);
+    }
+    .card-header {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-num {
+      background: var(--navy); color: white;
+      font-size: 0.7rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 20px;
+      white-space: nowrap; margin-top: 2px; flex-shrink: 0;
+    }
+    .card-name {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      line-height: 1.3;
+    }
+    .card-alias {
+      font-size: 0.78rem; color: var(--gold); font-weight: 600;
+    }
+    .card-meta {
+      font-size: 0.78rem; color: var(--muted);
+      display: flex; flex-wrap: wrap; gap: 0.3rem 1rem;
+      margin-top: 0.3rem; padding-left: 2rem;
+    }
+    .card-meta span { display: flex; align-items: center; gap: 0.25rem; }
+    .card-district {
+      font-size: 0.72rem; font-weight: 700; color: var(--gold);
+      padding-left: 2rem; margin-top: 0.2rem;
+    }
+    .card-horario {
+      font-size: 0.75rem; color: var(--navy); font-weight: 600;
+      padding-left: 2rem; margin-top: 0.25rem;
+    }
+    .card-arrow {
+      float: right; color: var(--gold); font-size: 1rem;
+      margin-top: 2px; margin-left: 8px;
+    }
+
+    /* ESTADO VACÍO */
+    .empty {
+      text-align: center; padding: 4rem 1rem; color: var(--muted);
+    }
+    .empty .icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 1.5rem 1rem 2rem;
+      font-size: 0.7rem; color: #a8a29e;
+      border-top: 1px solid var(--border);
+      max-width: 680px; margin: 0 auto;
+    }
+
+    /* SPINNER */
+    .spinner {
+      text-align: center; padding: 3rem; color: var(--muted); font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-icon">⛪</div>
+    <h1>Directorio de Localidades</h1>
+    <p>Iglesia de Dios (7° día) A.R.</p>
+    <div class="hero-badge" id="heroBadge">Cargando…</div>
+  </header>
+
+  <div class="content">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="searchInput" placeholder="Buscar por nombre, ciudad, pastor…" autocomplete="off"/>
+    </div>
+    <div class="count-bar" id="countBar"></div>
+    <div id="churchList"><div class="spinner">Cargando localidades…</div></div>
+  </div>
+
+  <footer>Sanctuary QR · Directorio de Iglesias · Distrito 6 · Jalisco</footer>
+
+  <script>
+  "use strict";
+
+  const STORE_KEY = "sq_churches_v3";
+
+  function getChurches() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); }
+    catch { return []; }
+  }
+
+  function esc(s) {
+    return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  function buildChurchURL(ch) {
+    const base = window.location.href.replace(/\/[^/]*(\?.*)?$/, "/church.html");
+    const p = new URLSearchParams();
+    const s = (k,v) => { if (v && String(v).trim()) p.set(k, String(v).trim()); };
+    const fullName = ch.alias ? ch.nombre + " " + ch.alias : ch.nombre;
+    s("n",  fullName);
+    s("d",  [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", "));
+    s("c",  ch.ciudad);
+    s("di", ch.distrito);
+    s("pa", ch.pastor);
+    s("t",  ch.tel);
+    s("h",  ch.horarios);
+    s("a",  ch.desc);
+    s("m",  ch.mapsUrl);
+    s("e",  ch.mapsEmbed);
+    s("w",  ch.welcome);
+    s("vr", ch.vRef);
+    s("vt", ch.vText);
+    return base + "#" + p.toString();
+  }
+
+  function renderList(churches) {
+    const container = document.getElementById("churchList");
+    const countBar  = document.getElementById("countBar");
+
+    if (!churches.length) {
+      container.innerHTML =
+        '<div class="empty"><span class="icon">⛪</span>' +
+        '<strong>Sin resultados</strong><br>' +
+        '<span style="font-size:0.85rem">Intenta con otro término de búsqueda.</span></div>';
+      countBar.textContent = "0 localidades";
+      return;
+    }
+
+    countBar.textContent = churches.length + " localidad" + (churches.length !== 1 ? "es" : "");
+
+    container.innerHTML = churches.map((ch, i) => {
+      const addr = [ch.calle, ch.colonia, ch.cp].filter(Boolean).join(", ");
+      const url  = buildChurchURL(ch);
+      return (
+        '<a class="church-card" href="' + esc(url) + '">' +
+          '<span class="card-arrow">›</span>' +
+          '<div class="card-header">' +
+            '<span class="card-num">#' + (i+1) + '</span>' +
+            '<div>' +
+              '<div class="card-name">' + esc(ch.nombre) + '</div>' +
+              (ch.alias ? '<div class="card-alias">' + esc(ch.alias) + '</div>' : '') +
+            '</div>' +
+          '</div>' +
+          (ch.distrito ? '<div class="card-district">📍 ' + esc(ch.distrito) + '</div>' : '') +
+          '<div class="card-meta">' +
+            (addr    ? '<span>🏠 ' + esc(addr)    + '</span>' : '') +
+            (ch.ciudad ? '<span>🌆 ' + esc(ch.ciudad) + '</span>' : '') +
+            (ch.pastor ? '<span>👤 ' + esc(ch.pastor) + '</span>' : '') +
+            (ch.tel    ? '<span>📞 ' + esc(ch.tel)    + '</span>' : '') +
+          '</div>' +
+          (ch.horarios ? '<div class="card-horario">🕐 ' + esc(ch.horarios.replace(/\n/g," · ")) + '</div>' : '') +
+        '</a>'
+      );
+    }).join("");
+  }
+
+  function init() {
+    const all = getChurches();
+    const badge = document.getElementById("heroBadge");
+
+    if (!all.length) {
+      badge.textContent = "Sin localidades";
+      badge.style.background = "#f87171";
+      document.getElementById("churchList").innerHTML =
+        '<div class="empty">' +
+          '<span class="icon">⛪</span>' +
+          '<strong>No hay localidades disponibles</strong><br>' +
+          '<span style="font-size:0.85rem">El administrador aún no ha publicado información.</span>' +
+        '</div>';
+      document.getElementById("countBar").textContent = "";
+      return;
+    }
+
+    badge.textContent = "Distrito 6 · " + all.length + " localidades";
+    renderList(all);
+
+    // Búsqueda
+    document.getElementById("searchInput").addEventListener("input", function() {
+      const q = this.value.trim().toLowerCase();
+      if (!q) { renderList(all); return; }
+      const filtered = all.filter(ch => {
+        const haystack = [ch.nombre, ch.alias, ch.ciudad, ch.calle, ch.colonia, ch.pastor, ch.distrito]
+          .filter(Boolean).join(" ").toLowerCase();
+        return haystack.includes(q);
+      });
+      renderList(filtered);
+    });
+  }
+
+  init();
+  </script>
+</body>
+</html>
