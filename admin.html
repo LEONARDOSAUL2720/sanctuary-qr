@@ -420,18 +420,23 @@
             style="background:#081534">
             <span class="material-symbols-outlined msym text-[20px]">download</span>Descargar QR General (PNG)
           </button>
-          <button onclick="downloadDirectorioImg()"
+          <button onclick="downloadChurchesJSON()"
             class="w-full h-12 font-semibold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
             style="background:#c8a84b;color:#081534">
-            <span class="material-symbols-outlined msym text-[20px]">image</span>Descargar Directorio (IMG)
+            <span class="material-symbols-outlined msym text-[20px]">data_object</span>Exportar churches.json
           </button>
-          <button onclick="downloadDirectorioHTML()"
+          <button onclick="downloadDirectorioImg()"
             class="w-full h-12 font-semibold rounded-xl hover:bg-white/50 transition-all flex items-center justify-center gap-2"
             style="border:1px solid rgba(8,21,52,0.2);color:#081534">
-            <span class="material-symbols-outlined msym text-[20px]">html</span>Exportar Directorio (HTML)
+            <span class="material-symbols-outlined msym text-[20px]">image</span>Descargar Directorio (IMG)
           </button>
         </div>
-        <p class="text-xs text-center" style="color:rgba(8,21,52,0.45)">El QR abre <strong>directorio.html</strong> en GitHub Pages.<br>Los usuarios ven todas las localidades al escanearlo.</p>
+        <div class="text-xs text-center rounded-xl p-3 w-full" style="background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.25);color:rgba(8,21,52,0.6)">
+          <strong style="color:#081534">Flujo de publicación:</strong><br>
+          1&#x2024; Exportar <code>churches.json</code><br>
+          2&#x2024; Subir al repo en GitHub junto con <code>directorio.html</code><br>
+          3&#x2024; GitHub Actions despliega · el QR no cambia nunca
+        </div>
       </div>
 
       <!-- Panel derecho: Vista previa del directorio -->
@@ -1036,38 +1041,47 @@
       return canvas.toDataURL("image/png");
     }
 
-    function buildDirectorioURL(churches) {
-      // Codifica las iglesias en la URL — solo campos necesarios para el directorio
-      const base = window.location.href.replace(/\/[^/]*(\?.*)?$/, "/directorio.html");
-      if (!churches || !churches.length) return base;
-      try {
-        // Solo campos esenciales para mostrar el directorio (sin vText, vRef, welcome, desc, mapsEmbed)
-        const slim = churches.map(ch => ({
-          n: ch.nombre  || "",
-          a: ch.alias   || "",
-          di: ch.distrito|| "",
-          p:  ch.pastor  || "",
-          t:  ch.tel     || "",
-          ca: ch.calle   || "",
-          co: ch.colonia || "",
-          cp: ch.cp      || "",
-          ci: ch.ciudad  || "",
-          m:  ch.mapsUrl || "",
-          h:  ch.horarios|| ""
-        }));
-        const json = JSON.stringify(slim);
-        const encoded = btoa(unescape(encodeURIComponent(json)));
-        return base + "#data=" + encoded;
-      } catch(e) {
-        return base;
-      }
+    // URL fija del directorio público — el QR solo apunta aquí, sin datos en la URL
+    const DIRECTORIO_URL = "https://leonardosaul2720.github.io/sanctuary-qr/directorio.html";
+
+    function buildDirectorioURL() {
+      return DIRECTORIO_URL;
+    }
+
+    // Exporta churches.json para subir al repo junto con directorio.html
+    function downloadChurchesJSON() {
+      const churches = getChurches();
+      if (!churches.length) { toast("⚠ No hay localidades registradas"); return; }
+      const slim = churches.map(ch => ({
+        n:  ch.nombre   || "",
+        a:  ch.alias    || "",
+        di: ch.distrito || "",
+        p:  ch.pastor   || "",
+        t:  ch.tel      || "",
+        ca: ch.calle    || "",
+        co: ch.colonia  || "",
+        cp: ch.cp       || "",
+        ci: ch.ciudad   || "",
+        m:  ch.mapsUrl  || "",
+        h:  ch.horarios || "",
+        vr: ch.vRef     || "",
+        vt: ch.vText    || ""
+      }));
+      const blob = new Blob([JSON.stringify(slim, null, 2)], { type: "application/json;charset=utf-8" });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.download = "churches.json";
+      a.href = url;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast("✓ churches.json descargado — súbelo al repo en GitHub");
     }
 
     function showQRGeneral() {
       const churches = getChurches();
       if (!churches.length) { toast("⚠ No hay localidades registradas"); return; }
 
-      // Renderizar preview lista
+      // Preview lista
       const list = document.getElementById("generalPreviewList");
       list.innerHTML = "";
       churches.forEach((ch, i) => {
@@ -1080,38 +1094,28 @@
           '<span style="background:#081534;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px">' + (i + 1) + '</span>' +
           '<span style="font-weight:700;font-size:13px;color:#081534">' + esc(name) + '</span>' +
           '</div>' +
-          (addr ? '<div style="font-size:11px;color:#45464e;margin-top:4px;padding-left:32px">' + esc(addr) + '</div>' : '') +
-          (ch.ciudad ? '<div style="font-size:11px;color:#45464e;padding-left:32px">' + esc(ch.ciudad) + '</div>' : '') +
-          (ch.pastor ? '<div style="font-size:11px;color:#45464e;padding-left:32px">👤 ' + esc(ch.pastor) + '</div>' : '') +
+          (addr    ? '<div style="font-size:11px;color:#45464e;margin-top:4px;padding-left:32px">' + esc(addr) + '</div>' : '') +
+          (ch.ciudad  ? '<div style="font-size:11px;color:#45464e;padding-left:32px">' + esc(ch.ciudad) + '</div>' : '') +
+          (ch.pastor  ? '<div style="font-size:11px;color:#45464e;padding-left:32px">👤 ' + esc(ch.pastor) + '</div>' : '') +
           (ch.horarios ? '<div style="font-size:11px;color:#c8a84b;font-weight:600;padding-left:32px">' + esc(ch.horarios.replace(/\n/g, " · ")) + '</div>' : '');
         list.appendChild(div);
       });
 
-      // QR apunta a directorio.html con datos codificados en la URL
-      const dirUrl = buildDirectorioURL(churches);
-      const box   = document.getElementById("qrGeneralCanvas");
-      const badge = document.getElementById("qrGeneralBadge");
+      // QR apunta solo a la URL fija — sin datos codificados
+      const dirUrl = buildDirectorioURL();
+      const box    = document.getElementById("qrGeneralCanvas");
+      const badge  = document.getElementById("qrGeneralBadge");
       box.innerHTML = "";
-      const urlLen = dirUrl.length;
-      const level = urlLen > 1500 ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M;
-      try {
-        new QRCode(box, {
-          text: dirUrl,
-          width: 260, height: 260,
-          colorDark: "#081534", colorLight: "#ffffff",
-          correctLevel: level
-        });
-        let badgeHtml;
-        if (urlLen <= 2000) {
-          badgeHtml = '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">&#x2713; QR listo &middot; ' + churches.length + ' localidades incluidas</span>';
-        } else {
-          badgeHtml = '<span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">&#x26A0; QR denso &mdash; escanear de cerca</span>';
-        }
-        badge.innerHTML = badgeHtml +
-          '<p style="font-size:10px;color:#45464e;margin-top:8px;text-align:center">(' + urlLen + ' chars &middot; datos codificados en URL)</p>';
-      } catch(e) {
-        box.innerHTML = '<p style="padding:1rem;color:#dc2626;font-size:0.8rem">URL demasiado grande para QR.<br>Reduce la descripci&#xF3;n o el vers&#xED;culo de las iglesias.</p>';
-      }
+      new QRCode(box, {
+        text: dirUrl,
+        width: 260, height: 260,
+        colorDark: "#081534", colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      badge.innerHTML =
+        '<span style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block">' +
+        '&#x2713; QR listo &middot; URL fija &middot; ' + churches.length + ' localidades en JSON</span>' +
+        '<p style="font-size:10px;color:#45464e;margin-top:8px;text-align:center">El QR apunta a la URL p&uacute;blica &mdash; descarga y sube <strong>churches.json</strong> al repo para actualizar el directorio.</p>';
 
       showScreen("scQRGeneral");
     }
