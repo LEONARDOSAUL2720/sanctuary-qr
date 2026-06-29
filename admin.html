@@ -1037,19 +1037,23 @@
     }
 
     function buildDirectorioURL(churches) {
-      // Codifica las iglesias en la URL para que cualquier dispositivo las vea
+      // Codifica las iglesias en la URL — solo campos necesarios para el directorio
       const base = window.location.href.replace(/\/[^/]*(\?.*)?$/, "/directorio.html");
       if (!churches || !churches.length) return base;
       try {
-        // Solo incluir campos necesarios para el directorio (omitir mapsEmbed que es muy pesado)
+        // Solo campos esenciales para mostrar el directorio (sin vText, vRef, welcome, desc, mapsEmbed)
         const slim = churches.map(ch => ({
-          id: ch.id, nombre: ch.nombre, alias: ch.alias || "",
-          distrito: ch.distrito || "", pastor: ch.pastor || "",
-          tel: ch.tel || "", calle: ch.calle || "", colonia: ch.colonia || "",
-          cp: ch.cp || "", ciudad: ch.ciudad || "",
-          mapsUrl: ch.mapsUrl || "", horarios: ch.horarios || "",
-          welcome: ch.welcome || "", vRef: ch.vRef || "", vText: ch.vText || "",
-          desc: ch.desc || "", createdAt: ch.createdAt || 0
+          n: ch.nombre  || "",
+          a: ch.alias   || "",
+          di: ch.distrito|| "",
+          p:  ch.pastor  || "",
+          t:  ch.tel     || "",
+          ca: ch.calle   || "",
+          co: ch.colonia || "",
+          cp: ch.cp      || "",
+          ci: ch.ciudad  || "",
+          m:  ch.mapsUrl || "",
+          h:  ch.horarios|| ""
         }));
         const json = JSON.stringify(slim);
         const encoded = btoa(unescape(encodeURIComponent(json)));

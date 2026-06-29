@@ -195,6 +195,26 @@
 
   const STORE_KEY = "sq_churches_v3";
 
+  // Normaliza un objeto con claves cortas (del QR General) a claves completas
+  function normalizeChurch(ch) {
+    // Si ya tiene claves completas (localStorage), devolverlo tal cual
+    if (ch.nombre !== undefined) return ch;
+    // Si tiene claves cortas (URL del QR General), mapearlas
+    return {
+      nombre:   ch.n  || "",
+      alias:    ch.a  || "",
+      distrito: ch.di || "",
+      pastor:   ch.p  || "",
+      tel:      ch.t  || "",
+      calle:    ch.ca || "",
+      colonia:  ch.co || "",
+      cp:       ch.cp || "",
+      ciudad:   ch.ci || "",
+      mapsUrl:  ch.m  || "",
+      horarios: ch.h  || ""
+    };
+  }
+
   function getChurches() {
     // 1) Leer desde la URL (#data=base64) — usado por el QR General
     try {
@@ -203,7 +223,9 @@
         const encoded = hash.slice(6);
         const json = decodeURIComponent(escape(atob(encoded)));
         const parsed = JSON.parse(json);
-        if (Array.isArray(parsed) && parsed.length) return parsed;
+        if (Array.isArray(parsed) && parsed.length) {
+          return parsed.map(normalizeChurch);
+        }
       }
     } catch(e) { /* ignorar errores de decodificación */ }
 
