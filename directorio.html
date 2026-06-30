@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
   
   <style>
-    /* ── CONFIGURACIÓN DE MATERIAL SYMBOLS ORIGINAL ── */
     .material-symbols-outlined {
       font-family: 'Material Symbols Outlined' !important;
       font-weight: normal;
@@ -35,8 +34,8 @@
     .msym { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     .msym-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-    /* ── SISTEMA DE RESPALDO (FALLBACK) SI LA FUENTE FALLA ── */
-    /* Cuando la fuente falla, ocultamos el texto plano original (evita que diga "church" en texto) */
+    /* ── SISTEMA DE RESPALDO AUTOMÁTICO (FALLBACK) PARA TARJETAS DINÁMICAS ── */
+    /* Si la fuente no carga, volvemos el texto plano invisible para que no rompa el diseño */
     .font-failed .material-symbols-outlined {
       color: transparent !important;
       position: relative;
@@ -45,32 +44,26 @@
       justify-content: center;
     }
 
-    /* Inyectamos un reemplazo visual adecuado y relacionado mediante CSS pseudo-elements */
+    /* Inyectamos un símbolo o emoji elegante relacionado al icono original mediante CSS */
     .font-failed .material-symbols-outlined::before {
-      color: currentColor;
       position: absolute;
       left: 0; top: 0;
       font-family: sans-serif !important;
-      font-size: 14px;
+      color: currentColor; /* Mantiene el color original asignado en el HTML (ej: text-gold, text-navy/30) */
     }
 
-    /* Mapeo de iconos de respaldo adaptados a tus tamaños y diseños */
-    .font-failed [data-icon="church"]::before            { content: "⛪"; font-size: 1.1em; }
-    .font-failed [data-icon="location_on"]::before      { content: "📍"; font-size: 0.9em; }
-    .font-failed [data-icon="search"]::before           { content: "🔍"; font-size: 0.9em; }
-    .font-failed [data-icon="home"]::before             { content: "🏠"; font-size: 1em; }
-    .font-failed [data-icon="location_city"]::before     { content: "🏙️"; font-size: 1em; }
-    .font-failed [data-icon="person"]::before           { content: "👤"; font-size: 1em; }
-    .font-failed [data-icon="schedule"]::before         { content: "🕒"; font-size: 1em; }
-    .font-failed [data-icon="map"]::before              { content: "🗺️"; font-size: 1em; }
-    .font-failed [data-icon="verified"]::before         { content: "✅"; font-size: 0.9em; }
-    .font-failed [data-icon="warning"]::before          { content: "⚠️"; font-size: 0.9em; }
-    .font-failed [data-icon="progress_activity"]::before { content: "⏳"; font-size: 1em; }
-
-    /* Ajustes específicos de tamaños en fallback */
-    .font-failed .card-distrito-icon::before { font-size: 12px !important; }
-    .font-failed .card-info-icon::before     { font-size: 16px !important; }
-    .font-failed .card-btn-icon::before      { font-size: 15px !important; }
+    /* Mapeo CSS inteligente de tus iconos basado en su atributo data-icon */
+    .font-failed [data-icon="church"]::before            { content: "⛪"; }
+    .font-failed [data-icon="location_on"]::before      { content: "📍"; }
+    .font-failed [data-icon="search"]::before           { content: "🔍"; }
+    .font-failed [data-icon="home"]::before             { content: "🏠"; }
+    .font-failed [data-icon="location_city"]::before     { content: "🏙️"; }
+    .font-failed [data-icon="person"]::before           { content: "👤"; }
+    .font-failed [data-icon="schedule"]::before         { content: "🕒"; }
+    .font-failed [data-icon="map"]::before              { content: "🗺️"; }
+    .font-failed [data-icon="warning"]::before          { content: "⚠️"; }
+    .font-failed [data-icon="verified"]::before         { content: "✅"; }
+    .font-failed [data-icon="progress_activity"]::before { content: "⏳"; }
   </style>
 
   <style>
@@ -148,13 +141,22 @@
 <body class="bg-surface font-sans text-on-surf min-h-screen">
 
   <script>
-    document.fonts.load("1em Material Symbols Outlined").then(() => {
-      if (!document.fonts.check("1em Material Symbols Outlined")) {
-        document.body.classList.add("font-failed");
-      }
-    }).catch(() => {
-      document.body.classList.add("font-failed");
-    });
+    (function() {
+      const test = document.createElement("span");
+      test.className = "material-symbols-outlined";
+      test.innerHTML = "church";
+      test.style.position = "absolute";
+      test.style.visibility = "hidden";
+      document.documentElement.appendChild(test);
+      
+      // Si el ancho es muy pequeño, significa que el navegador no dibujó el icono y dejó texto plano
+      setTimeout(() => {
+        if (test.offsetWidth < 15) {
+          document.body.classList.add("font-failed");
+        }
+        test.remove();
+      }, 100);
+    })();
   </script>
 
   <header class="bg-navy shadow-md fixed w-full top-0 z-50">
@@ -276,10 +278,11 @@
     return (s||"").replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">");
   }
 
+  // Corregido el string repetido del maps legacy
   function buildMapsURL(ch) {
     if (ch.mapsUrl) return ch.mapsUrl;
     const parts = [ch.calle, ch.colonia, ch.cp, ch.ciudad].filter(Boolean).join(", ");
-    return parts ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(parts) : "";
+    return parts ? "https://maps.google.com/?q=" + encodeURIComponent(parts) : "";
   }
 
   function renderCard(ch, i) {
@@ -288,9 +291,8 @@
     const vRef     = ch.vRef  || DEFAULT_VREF;
     const vText    = ch.vText || DEFAULT_VTEXT;
 
-    /* Mantenemos las ligaduras semánticas chidas ("church", "home", etc.) que se ven espectaculares.
-       Agregamos el atributo `data-icon` para que el CSS sepa qué icono pintar de respaldo si la fuente no carga.
-    */
+    /* Conservamos tus ligaduras de texto originales ("church", "home") que se ven excelente.
+       Añadimos el atributo `data-icon` para que el CSS sepa qué pintar si la fuente externa falla. */
     return `
       <div class="masonry-item">
         <div class="church-card">
