@@ -23,8 +23,9 @@
       word-wrap: normal;
       direction: ltr;
 
-      font-feature-settings: 'liga' 1;
-      -webkit-font-feature-settings: 'liga' 1;
+      /* Desactivamos ligaduras problemáticas y forzamos códigos de soporte */
+      font-feature-settings: normal !important;
+      -webkit-font-feature-settings: normal !important;
 
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
@@ -34,47 +35,6 @@
     .msym { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     .msym-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-    /* ── SISTEMA DE RESPALDO (FALLBACK) SI LA FUENTE DE GOOGLE NO CARGA ── */
-    /* Si se activa la clase 'font-failed', ocultamos el texto plano para que no diga "home", "church", etc. */
-    .font-failed .material-symbols-outlined {
-      color: transparent !important;
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-    }
-
-    /* Inyectamos un emoji/símbolo nativo relacionado mediante CSS */
-    .font-failed .material-symbols-outlined::before {
-      position: absolute;
-      left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      font-family: sans-serif !important;
-      color: currentColor; /* Respeta los colores dorados o tenues del diseño */
-    }
-
-    /* Mapeo visual de reemplazos */
-    .font-failed [data-icon="church"]::before            { content: "静态⛪"; font-size: 18px; }
-    .font-failed [data-icon="location_on"]::before      { content: "📍"; font-size: 14px; }
-    .font-failed [data-icon="search"]::before           { content: "🔍"; font-size: 16px; }
-    .font-failed [data-icon="home"]::before             { content: "🏠"; font-size: 16px; }
-    .font-failed [data-icon="location_city"]::before     { content: "🏙️"; font-size: 16px; }
-    .font-failed [data-icon="person"]::before           { content: "👤"; font-size: 16px; }
-    .font-failed [data-icon="schedule"]::before         { content: "🕒"; font-size: 16px; }
-    .font-failed [data-icon="map"]::before              { content: "🗺️"; font-size: 16px; }
-    .font-failed [data-icon="warning"]::before          { content: "⚠️"; font-size: 14px; }
-    .font-failed [data-icon="verified"]::before         { content: "✅"; font-size: 14px; }
-    .font-failed [data-icon="progress_activity"]::before { content: "⏳"; font-size: 16px; }
-
-    /* Ajustes de tamaño si falla la fuente en componentes específicos */
-    .font-failed .card-distrito-icon { width: 14px; height: 14px; }
-    .font-failed .card-info-icon { width: 18px; height: 18px; }
-    .font-failed .card-btn-icon { width: 18px; height: 18px; }
-  </style>
-
-  <style>
     /* ── TRUE MASONRY ─── */
     .masonry { columns: 2; column-gap: 12px; }
     @media (min-width: 640px)  { .masonry { columns: 2; column-gap: 20px; } }
@@ -148,22 +108,10 @@
 </head>
 <body class="bg-surface font-sans text-on-surf min-h-screen">
 
-  <script>
-    if (document.fonts) {
-      document.fonts.load("1em Material Symbols Outlined").then(() => {
-        if (!document.fonts.check("1em Material Symbols Outlined")) {
-          document.body.classList.add("font-failed");
-        }
-      }).catch(() => {
-        document.body.classList.add("font-failed");
-      });
-    }
-  </script>
-
   <header class="bg-navy shadow-md fixed w-full top-0 z-50">
     <div class="max-w-content mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined msym-fill text-gold text-2xl" data-icon="church">church</span>
+         <span class="material-symbols-outlined msym-fill text-gold text-2xl">&#xeaae;</span>
         <span class="font-bold text-lg text-gold tracking-tight">Sanctuary QR</span>
         <span class="hidden sm:inline text-white/40 mx-1">·</span>
         <span class="hidden sm:inline text-white/60 text-sm font-label">Directorio</span>
@@ -177,7 +125,7 @@
          style="background: radial-gradient(circle at 20% 50%, #c8a84b 0%, transparent 50%), radial-gradient(circle at 80% 20%, #2d3f6e 0%, transparent 50%)"></div>
     <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
       <div class="bg-white/5 border border-gold/25 rounded-full p-4 mb-5">
-        <span class="material-symbols-outlined msym-fill text-gold" style="font-size:3rem" data-icon="church">church</span>
+         <span class="material-symbols-outlined msym-fill text-gold" style="font-size:3rem">&#xeaae;</span>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 leading-tight">
         Directorio de Localidades
@@ -187,7 +135,7 @@
       </p>
       <div id="heroBadge"
            class="inline-flex items-center gap-1.5 bg-gold text-navy px-4 py-1.5 rounded-full text-xs font-bold font-label">
-        <span class="material-symbols-outlined msym text-navy" style="font-size:14px" data-icon="schedule">schedule</span>
+        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">&#xe8b5;</span>
         Cargando…
       </div>
     </div>
@@ -196,7 +144,7 @@
   <section class="max-w-content mx-auto px-4 sm:px-6 -mt-10 relative z-20 mb-6">
     <div class="max-w-2xl mx-auto">
       <div class="relative group">
-        <span class="material-symbols-outlined msym absolute left-5 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-navy transition-colors" style="font-size:20px" data-icon="search">search</span>
+        <span class="material-symbols-outlined msym absolute left-5 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-navy transition-colors" style="font-size:20px">&#xe8b6;</span>
         <input id="searchInput" type="search" autocomplete="off"
           placeholder="Buscar por nombre, dirección, C.P., número de domicilio…"
           class="search-input w-full pl-14 pr-5 py-4 rounded-2xl border-none shadow-xl bg-white text-on-surf text-sm font-label placeholder:text-muted/60 transition-all"/>
@@ -209,7 +157,7 @@
     <div id="churchList" class="masonry">
       <div class="masonry-item" id="loadingSpinner">
         <div class="church-card p-6 flex items-center justify-center gap-3 text-muted text-sm font-label">
-          <span class="material-symbols-outlined msym animate-spin" style="font-size:20px" data-icon="progress_activity">progress_activity</span>
+          <span class="material-symbols-outlined msym animate-spin" style="font-size:20px">&#xe71f;</span>
           Cargando localidades…
         </div>
       </div>
@@ -282,7 +230,7 @@
   function buildMapsURL(ch) {
     if (ch.mapsUrl) return ch.mapsUrl;
     const parts = [ch.calle, ch.colonia, ch.cp, ch.ciudad].filter(Boolean).join(", ");
-    return parts ? "https://maps.google.com/?q=" + encodeURIComponent(parts) : "";
+    return parts ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(parts) : "";
   }
 
   function renderCard(ch, i) {
@@ -299,7 +247,7 @@
               <span class="bg-navy text-white text-xs font-bold font-label px-3 py-1 rounded-full card-badge">#${i+1}</span>
               ${ch.distrito ? `
               <div class="flex items-center gap-1 text-gold text-xs font-bold font-label card-distrito">
-                <span class="material-symbols-outlined msym card-distrito-icon" style="font-size:14px" data-icon="location_on">location_on</span>
+                <span class="material-symbols-outlined msym card-distrito-icon" style="font-size:14px">&#xe0c8;</span>
                 ${esc(ch.distrito)}
               </div>` : ''}
             </div>
@@ -312,22 +260,22 @@
             <div class="space-y-3 mb-5 card-info">
               ${addrFull ? `
               <div class="flex items-start gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px" data-icon="home">home</span>
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px">&#xe88a;</span>
                 <span class="text-muted text-sm font-label leading-snug card-info-text">${esc(addrFull)}</span>
               </div>` : ''}
               ${ch.ciudad ? `
               <div class="flex items-center gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px" data-icon="location_city">location_city</span>
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px">&#xe7f1;</span>
                 <span class="text-navy font-semibold text-sm font-label card-info-text font-bold">${esc(ch.ciudad)}</span>
               </div>` : ''}
               ${ch.pastor ? `
               <div class="flex items-center gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px" data-icon="person">person</span>
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px">&#xe7fd;</span>
                 <span class="text-muted text-sm font-label card-info-text">${esc(ch.pastor)}</span>
               </div>` : ''}
               ${ch.horarios ? `
               <div class="flex items-start gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px" data-icon="schedule">schedule</span>
+                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px">&#xe8b5;</span>
                 <span class="text-muted text-sm font-label leading-snug card-info-text">${esc(ch.horarios.replace(/\n/g," · "))}</span>
               </div>` : ''}
             </div>
@@ -335,7 +283,7 @@
             ${mapsHref ? `
             <a href="${esc(mapsHref)}" target="_blank" rel="noopener"
                class="w-full flex items-center justify-center gap-2 bg-[#1a73e8] hover:brightness-95 text-white text-sm font-bold font-label py-2.5 rounded-xl transition-all mb-5 card-btn">
-              <span class="material-symbols-outlined msym-fill card-btn-icon" style="font-size:18px" data-icon="map">map</span>
+              <span class="material-symbols-outlined msym-fill card-btn-icon" style="font-size:18px">&#xe55b;</span>
               Ver en Google Maps
             </a>` : ''}
 
@@ -356,7 +304,7 @@
       container.innerHTML = `
         <div class="masonry-item">
           <div class="church-card p-10 flex flex-col items-center text-center text-muted gap-3">
-            <span class="material-symbols-outlined msym text-5xl" data-icon="church">church</span>
+            <span class="material-symbols-outlined msym text-5xl">&#xeaae;</span>
             <strong class="text-on-surf">Sin resultados</strong>
             <span class="text-sm">Intenta con otro término de búsqueda.</span>
           </div>
@@ -376,7 +324,7 @@
 
     if (!all.length) {
       badge.innerHTML = `
-        <span class="material-symbols-outlined msym text-navy" style="font-size:14px" data-icon="warning">warning</span>
+        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">&#xe002;</span>
         Sin localidades`;
       badge.classList.remove("bg-gold");
       badge.classList.add("bg-red-400", "text-white");
@@ -384,7 +332,7 @@
       document.getElementById("churchList").innerHTML = `
         <div class="masonry-item">
           <div class="church-card p-10 flex flex-col items-center text-center text-muted gap-3">
-            <span class="material-symbols-outlined msym text-5xl" data-icon="church">church</span>
+            <span class="material-symbols-outlined msym text-5xl">&#xeaae;</span>
             <strong class="text-on-surf">No hay localidades disponibles</strong>
             <span class="text-sm">El administrador aún no ha publicado el archivo churches.json.</span>
           </div>
@@ -394,7 +342,7 @@
     }
 
     badge.innerHTML = `
-      <span class="material-symbols-outlined msym-fill text-navy" style="font-size:14px" data-icon="verified">verified</span>
+      <span class="material-symbols-outlined msym-fill text-navy" style="font-size:14px">&#xe8e8;</span>
       Distrito 6 · ${all.length} localidades`;
 
     renderList(all);
