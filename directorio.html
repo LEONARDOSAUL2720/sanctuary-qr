@@ -7,33 +7,16 @@
   <meta name="robots" content="noindex, nofollow"/>
   <link rel="stylesheet" href="./style.css">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
   
   <style>
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined' !important;
-      font-weight: normal;
-      font-style: normal;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
+    /* Estilos base para los iconos SVG integrados */
+    .svg-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
       display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-
-      /* Desactivamos ligaduras problemáticas y forzamos códigos de soporte */
-      font-feature-settings: normal !important;
-      -webkit-font-feature-settings: normal !important;
-
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      -moz-osx-font-smoothing: grayscale;
+      flex-shrink: 0;
     }
-
-    .msym { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    .msym-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
     /* ── TRUE MASONRY ─── */
     .masonry { columns: 2; column-gap: 12px; }
@@ -90,7 +73,7 @@
       .card-info { margin-bottom: 12px !important; }
       .card-info > * + * { margin-top: 6px !important; }
       .card-info-item { gap: 8px !important; }
-      .card-info-icon { font-size: 15px !important; margin-top: 1px !important; }
+      .card-info-icon { width: 16px !important; height: 16px !important; margin-top: 1px !important; }
       .card-info-text { font-size: 11px !important; line-height: 1.3 !important; }
       .card-btn {
         margin-bottom: 12px !important;
@@ -99,7 +82,7 @@
         font-size: 11px !important;
         border-radius: 8px !important;
       }
-      .card-btn-icon { font-size: 15px !important; }
+      .card-btn-icon { width: 16px !important; height: 16px !important; }
       .card-verse-block { padding-top: 8px !important; }
       .card-verse-ref { font-size: 9px !important; margin-bottom: 4px !important; }
       .card-verse-text { font-size: 10px !important; line-height: 1.3 !important; }
@@ -111,7 +94,7 @@
   <header class="bg-navy shadow-md fixed w-full top-0 z-50">
     <div class="max-w-content mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-2">
-         <span class="material-symbols-outlined msym-fill text-gold text-2xl">&#xeaae;</span>
+        <svg class="svg-icon text-gold" style="width:24px; height:24px;" viewBox="0 -960 960 960"><path d="M480-80 120-280v-400l360-200 360 200v400L480-80Zm0-134 280-156v-308L480-834 200-678v308l280 156Zm0-126v-160h160v-80H480v-120h-80v120H280v80h160v160h80Zm0-240Z"/></svg>
         <span class="font-bold text-lg text-gold tracking-tight">Sanctuary QR</span>
         <span class="hidden sm:inline text-white/40 mx-1">·</span>
         <span class="hidden sm:inline text-white/60 text-sm font-label">Directorio</span>
@@ -125,7 +108,7 @@
          style="background: radial-gradient(circle at 20% 50%, #c8a84b 0%, transparent 50%), radial-gradient(circle at 80% 20%, #2d3f6e 0%, transparent 50%)"></div>
     <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
       <div class="bg-white/5 border border-gold/25 rounded-full p-4 mb-5">
-         <span class="material-symbols-outlined msym-fill text-gold" style="font-size:3rem">&#xeaae;</span>
+        <svg class="svg-icon text-gold" style="width:48px; height:48px;" viewBox="0 -960 960 960"><path d="M480-80 120-280v-400l360-200 360 200v400L480-80Zm0-134 280-156v-308L480-834 200-678v308l280 156Zm0-126v-160h160v-80H480v-120h-80v120H280v80h160v160h80Zm0-240Z"/></svg>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 leading-tight">
         Directorio de Localidades
@@ -135,7 +118,7 @@
       </p>
       <div id="heroBadge"
            class="inline-flex items-center gap-1.5 bg-gold text-navy px-4 py-1.5 rounded-full text-xs font-bold font-label">
-        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">&#xe8b5;</span>
+        <svg class="svg-icon text-navy" style="width:14px; height:14px;" viewBox="0 -960 960 960"><path d="m614-310 50-50-144-144v-176h-80v208l174 174Q403-400 400-480q0-133 93.5-226.5T720-800q133 0 226.5 93.5T1040-480q0 133-93.5 226.5T720-160q-43 0-83-11.5t-73-33.5Zm106-90q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70Z"/></svg>
         Cargando…
       </div>
     </div>
@@ -144,7 +127,7 @@
   <section class="max-w-content mx-auto px-4 sm:px-6 -mt-10 relative z-20 mb-6">
     <div class="max-w-2xl mx-auto">
       <div class="relative group">
-        <span class="material-symbols-outlined msym absolute left-5 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-navy transition-colors" style="font-size:20px">&#xe8b6;</span>
+        <svg class="svg-icon text-muted absolute left-5 top-1/2 -translate-y-1/2 group-focus-within:text-navy transition-colors" style="width:20px; height:20px;" viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-54 54ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
         <input id="searchInput" type="search" autocomplete="off"
           placeholder="Buscar por nombre, dirección, C.P., número de domicilio…"
           class="search-input w-full pl-14 pr-5 py-4 rounded-2xl border-none shadow-xl bg-white text-on-surf text-sm font-label placeholder:text-muted/60 transition-all"/>
@@ -157,7 +140,7 @@
     <div id="churchList" class="masonry">
       <div class="masonry-item" id="loadingSpinner">
         <div class="church-card p-6 flex items-center justify-center gap-3 text-muted text-sm font-label">
-          <span class="material-symbols-outlined msym animate-spin" style="font-size:20px">&#xe71f;</span>
+          <svg class="svg-icon animate-spin" style="width:20px; height:20px;" viewBox="0 -960 960 960"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q17 0 28.5 11.5T520-840q0 17-11.5 28.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-17 11.5-28.5T840-520q17 0 28.5 11.5T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
           Cargando localidades…
         </div>
       </div>
@@ -180,6 +163,19 @@
   const DEFAULT_VREF  = "Mateo 11:28";
   const DEFAULT_VTEXT = "\u00abVengan a m\u00ed todos los que est\u00e1n cansados y llevan cargas pesadas, y yo les dar\u00e9 descanso.\u00bb";
   const JSON_URL      = "./churches.json";
+
+  // Almacén de paths SVG nativos para componentes dinámicos
+  const SVGS = {
+    location: `<svg class="svg-icon card-distrito-icon" style="width:14px; height:14px;" viewBox="0 -960 960 960"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q312-234 236-391.5T160-674q0-151 104.5-238.5T480-1000q161 0 265.5 87.5T850-674q0 116.5-76 274T480-80Z"/></svg>`,
+    home: `<svg class="svg-icon text-navy/30 card-info-icon" style="width:18px; height:18px;" viewBox="0 -960 960 960"><path d="M160-120v-480l320-240 320 240v480H520v-240h-80v240H160Z"/></svg>`,
+    city: `<svg class="svg-icon text-navy/30 card-info-icon" style="width:18px; height:18px;" viewBox="0 -960 960 960"><path d="M120-120v-360h160v-200h200v160h160v120h200v280H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm240 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm240 320h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/></svg>`,
+    person: `<svg class="svg-icon text-navy/30 card-info-icon" style="width:18px; height:18px;" viewBox="0 -960 960 960"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-240v-32q0-34 17.5-62.5T226-378q62-31 126-46.5T480-440q64 0 128 15.5T734-378q31 15 48.5 43.5T800-272v32H160Z"/></svg>`,
+    schedule: `<svg class="svg-icon text-navy/30 card-info-icon" style="width:18px; height:18px;" viewBox="0 -960 960 960"><path d="m614-310 50-50-144-144v-176h-80v208l174 174Q403-400 400-480q0-133 93.5-226.5T720-800q133 0 226.5 93.5T1040-480q0 133-93.5 226.5T720-160q-43 0-83-11.5t-73-33.5Zm106-90q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70Z"/></svg>`,
+    map: `<svg class="svg-icon card-btn-icon" style="width:18px; height:18px;" viewBox="0 -960 960 960"><path d="m600-120-240-84-240 84v-720l240-84 240 84 240-84v720L600-120Zm-40-143v-494l-160-56v494l160 56Zm80 54 160-55v-494l-160 55v494Zm-440-11 160-56v-494l-160 56v494Z"/></svg>`,
+    church: `<svg class="svg-icon" style="width:48px; height:48px;" viewBox="0 -960 960 960"><path d="M480-80 120-280v-400l360-200 360 200v400L480-80Zm0-134 280-156v-308L480-834 200-678v308l280 156Zm0-126v-160h160v-80H480v-120h-80v120H280v80h160v160h80Zm0-240Z"/></svg>`,
+    warning: `<svg class="svg-icon" style="width:14px; height:14px;" viewBox="0 -960 960 960"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-197q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>`,
+    verified: `<svg class="svg-icon" style="width:14px; height:14px;" viewBox="0 -960 960 960"><path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-24-10-112 74-86-74-86 10-112-110-24-56-96-104 44-102-44-56 96-110 24 10 112-74 86 74 86-10 112 110 24 56 96Zm102-318 212-212-56-56-156 156-76-76-56 56 132 132Z"/></svg>`
+  };
 
   function normalizeChurch(ch) {
     if (ch.nombre !== undefined) return ch;
@@ -247,8 +243,8 @@
               <span class="bg-navy text-white text-xs font-bold font-label px-3 py-1 rounded-full card-badge">#${i+1}</span>
               ${ch.distrito ? `
               <div class="flex items-center gap-1 text-gold text-xs font-bold font-label card-distrito">
-                <span class="material-symbols-outlined msym card-distrito-icon" style="font-size:14px">&#xe0c8;</span>
-                ${esc(ch.distrito)}
+                \u200B${SVGS.location}
+                <span>${esc(ch.distrito)}</span>
               </div>` : ''}
             </div>
 
@@ -260,22 +256,22 @@
             <div class="space-y-3 mb-5 card-info">
               ${addrFull ? `
               <div class="flex items-start gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px">&#xe88a;</span>
+                \u200B${SVGS.home}
                 <span class="text-muted text-sm font-label leading-snug card-info-text">${esc(addrFull)}</span>
               </div>` : ''}
               ${ch.ciudad ? `
               <div class="flex items-center gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px">&#xe7f1;</span>
+                \u200B${SVGS.city}
                 <span class="text-navy font-semibold text-sm font-label card-info-text font-bold">${esc(ch.ciudad)}</span>
               </div>` : ''}
               ${ch.pastor ? `
               <div class="flex items-center gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 card-info-icon" style="font-size:18px">&#xe7fd;</span>
+                \u200B${SVGS.person}
                 <span class="text-muted text-sm font-label card-info-text">${esc(ch.pastor)}</span>
               </div>` : ''}
               ${ch.horarios ? `
               <div class="flex items-start gap-3 card-info-item">
-                <span class="material-symbols-outlined msym text-navy/30 flex-shrink-0 mt-0.5 card-info-icon" style="font-size:18px">&#xe8b5;</span>
+                \u200B${SVGS.schedule}
                 <span class="text-muted text-sm font-label leading-snug card-info-text">${esc(ch.horarios.replace(/\n/g," · "))}</span>
               </div>` : ''}
             </div>
@@ -283,7 +279,7 @@
             ${mapsHref ? `
             <a href="${esc(mapsHref)}" target="_blank" rel="noopener"
                class="w-full flex items-center justify-center gap-2 bg-[#1a73e8] hover:brightness-95 text-white text-sm font-bold font-label py-2.5 rounded-xl transition-all mb-5 card-btn">
-              <span class="material-symbols-outlined msym-fill card-btn-icon" style="font-size:18px">&#xe55b;</span>
+              \u200B${SVGS.map}
               Ver en Google Maps
             </a>` : ''}
 
@@ -304,7 +300,7 @@
       container.innerHTML = `
         <div class="masonry-item">
           <div class="church-card p-10 flex flex-col items-center text-center text-muted gap-3">
-            <span class="material-symbols-outlined msym text-5xl">&#xeaae;</span>
+            \u200B${SVGS.church}
             <strong class="text-on-surf">Sin resultados</strong>
             <span class="text-sm">Intenta con otro término de búsqueda.</span>
           </div>
@@ -324,7 +320,7 @@
 
     if (!all.length) {
       badge.innerHTML = `
-        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">&#xe002;</span>
+        \u200B${SVGS.warning}
         Sin localidades`;
       badge.classList.remove("bg-gold");
       badge.classList.add("bg-red-400", "text-white");
@@ -332,7 +328,7 @@
       document.getElementById("churchList").innerHTML = `
         <div class="masonry-item">
           <div class="church-card p-10 flex flex-col items-center text-center text-muted gap-3">
-            <span class="material-symbols-outlined msym text-5xl">&#xeaae;</span>
+            \u200B${SVGS.church}
             <strong class="text-on-surf">No hay localidades disponibles</strong>
             <span class="text-sm">El administrador aún no ha publicado el archivo churches.json.</span>
           </div>
@@ -342,7 +338,7 @@
     }
 
     badge.innerHTML = `
-      <span class="material-symbols-outlined msym-fill text-navy" style="font-size:14px">&#xe8e8;</span>
+      \u200B${SVGS.verified}
       Distrito 6 · ${all.length} localidades`;
 
     renderList(all);
