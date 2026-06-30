@@ -10,33 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
   
   <style>
-   .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined' !important;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-
-  font-feature-settings: 'liga' 1;
-  -webkit-font-feature-settings: 'liga' 1;
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-fallback {
-  font-family: 'Material Symbols Outlined' !important;
-  font-feature-settings: normal !important;
-  -webkit-font-feature-settings: normal !important;
-}
-    /* .material-symbols-outlined {
+    .material-symbols-outlined {
       font-family: 'Material Symbols Outlined' !important;
       font-weight: normal;
       font-style: normal;
@@ -48,11 +22,26 @@
       white-space: nowrap;
       word-wrap: normal;
       direction: ltr;
-      -webkit-font-feature-settings: 'liga';
-      -webkit-font-smoothing: antialiased;      
+
+      font-feature-settings: 'liga' 1;
+      -webkit-font-feature-settings: 'liga' 1;
+
+      -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       -moz-osx-font-smoothing: grayscale;
-    }  */
+    }
+
+    /* Fallback por si la fuente no carga: oculta el texto de la ligadura para que no se vea el texto plano */
+    @font-face {
+      font-family: 'Material Symbols Outlined';
+      src: local('Material Symbols Outlined');
+    }
+    
+    /* Si deseas que no se renderice el texto si falla la fuente, esta propiedad ayuda */
+    .material-symbols-outlined:not(:defined) {
+      color: transparent !important;
+    }
+
     .msym { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     .msym-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
@@ -129,11 +118,10 @@
 </head>
 <body class="bg-surface font-sans text-on-surf min-h-screen">
 
-  <!-- ══ NAVBAR ═══════════════════════════════════════════════════════ -->
   <header class="bg-navy shadow-md fixed w-full top-0 z-50">
     <div class="max-w-content mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined msym-fill text-gold text-2xl">church</span>
+         <span class="material-symbols-outlined msym-fill text-gold text-2xl">church</span>
         <span class="font-bold text-lg text-gold tracking-tight">Sanctuary QR</span>
         <span class="hidden sm:inline text-white/40 mx-1">·</span>
         <span class="hidden sm:inline text-white/60 text-sm font-label">Directorio</span>
@@ -142,24 +130,19 @@
     </div>
   </header>
 
-  <!-- ══ HERO ═════════════════════════════════════════════════════════ -->
   <section class="bg-navy pt-28 pb-28 text-center px-4 relative overflow-hidden hero-wave">
-    <!-- Fondo decorativo -->
     <div class="absolute inset-0 opacity-5 pointer-events-none"
          style="background: radial-gradient(circle at 20% 50%, #c8a84b 0%, transparent 50%), radial-gradient(circle at 80% 20%, #2d3f6e 0%, transparent 50%)"></div>
     <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-      <!-- Ícono -->
       <div class="bg-white/5 border border-gold/25 rounded-full p-4 mb-5">
-        <span class="material-symbols-outlined msym-fill text-gold" style="font-size:3rem">church</span>
+         <span class="material-symbols-outlined msym-fill text-gold" style="font-size:3rem">church</span>
       </div>
-      <!-- Título -->
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 leading-tight">
         Directorio de Localidades
       </h1>
       <p class="text-gold/80 text-sm font-label mb-5">
         Iglesia de Dios (7° día) A.R. · Distrito 6
       </p>
-      <!-- Badge dinámico -->
       <div id="heroBadge"
            class="inline-flex items-center gap-1.5 bg-gold text-navy px-4 py-1.5 rounded-full text-xs font-bold font-label">
         <span class="material-symbols-outlined msym text-navy" style="font-size:14px">schedule</span>
@@ -168,7 +151,6 @@
     </div>
   </section>
 
-  <!-- ══ BUSCADOR ══════════════════════════════════════════════════════ -->
   <section class="max-w-content mx-auto px-4 sm:px-6 -mt-10 relative z-20 mb-6">
     <div class="max-w-2xl mx-auto">
       <div class="relative group">
@@ -181,10 +163,8 @@
     </div>
   </section>
 
-  <!-- ══ DIRECTORIO ════════════════════════════════════════════════════ -->
   <main class="max-w-content mx-auto px-4 sm:px-6 pb-24">
     <div id="churchList" class="masonry">
-      <!-- Spinner inicial -->
       <div class="masonry-item" id="loadingSpinner">
         <div class="church-card p-6 flex items-center justify-center gap-3 text-muted text-sm font-label">
           <span class="material-symbols-outlined msym animate-spin" style="font-size:20px">progress_activity</span>
@@ -194,7 +174,6 @@
     </div>
   </main>
 
-  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <footer class="bg-white border-t border-outline-v">
     <div class="max-w-content mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
       <div>
@@ -232,7 +211,6 @@
   }
 
   async function fetchChurches() {
-    // 1) churches.json (GitHub Pages)
     try {
       const res = await fetch(JSON_URL);
       if (res.ok) {
@@ -240,7 +218,6 @@
         if (Array.isArray(data) && data.length) return data.map(normalizeChurch);
       }
     } catch(e) {}
-    // 2) Hash en URL (fallback legacy)
     try {
       const hash = window.location.hash;
       if (hash && hash.startsWith("#data=")) {
@@ -249,7 +226,6 @@
         if (Array.isArray(parsed) && parsed.length) return parsed.map(normalizeChurch);
       }
     } catch(e) {}
-    // 3) localStorage (desarrollo local)
     try {
       const local = JSON.parse(localStorage.getItem("sq_churches_v3") || "[]");
       if (local.length) return local.map(normalizeChurch);
@@ -264,7 +240,7 @@
   function buildMapsURL(ch) {
     if (ch.mapsUrl) return ch.mapsUrl;
     const parts = [ch.calle, ch.colonia, ch.cp, ch.ciudad].filter(Boolean).join(", ");
-    return parts ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(parts) : "";
+    return parts ? "https://maps.google.com/?q=" + encodeURIComponent(parts) : "";
   }
 
   function renderCard(ch, i) {
@@ -277,7 +253,6 @@
       <div class="masonry-item">
         <div class="church-card">
           <div class="p-6 card-body">
-            <!-- Header: número + distrito -->
             <div class="flex justify-between items-start mb-5 card-header">
               <span class="bg-navy text-white text-xs font-bold font-label px-3 py-1 rounded-full card-badge">#${i+1}</span>
               ${ch.distrito ? `
@@ -287,13 +262,11 @@
               </div>` : ''}
             </div>
 
-            <!-- Nombre -->
             <div class="mb-5 card-title-block">
               <h3 class="text-lg font-extrabold text-navy leading-tight card-title">${esc(ch.nombre)}</h3>
               ${ch.alias ? `<p class="text-gold font-bold text-sm font-label mt-0.5 card-alias">${esc(ch.alias)}</p>` : ''}
             </div>
 
-            <!-- Info: dirección + ciudad -->
             <div class="space-y-3 mb-5 card-info">
               ${addrFull ? `
               <div class="flex items-start gap-3 card-info-item">
@@ -317,7 +290,6 @@
               </div>` : ''}
             </div>
 
-            <!-- Botón Maps -->
             ${mapsHref ? `
             <a href="${esc(mapsHref)}" target="_blank" rel="noopener"
                class="w-full flex items-center justify-center gap-2 bg-[#1a73e8] hover:brightness-95 text-white text-sm font-bold font-label py-2.5 rounded-xl transition-all mb-5 card-btn">
@@ -325,7 +297,6 @@
               Ver en Google Maps
             </a>` : ''}
 
-            <!-- Versículo -->
             <div class="border-t border-outline-v pt-4 flex flex-col items-center text-center card-verse-block">
               <span class="text-gold text-xs font-bold font-label uppercase tracking-widest mb-1.5 card-verse-ref">${esc(vRef)}</span>
               <p class="italic text-muted text-xs leading-relaxed card-verse-text">${esc(vText)}</p>
@@ -363,7 +334,7 @@
 
     if (!all.length) {
       badge.innerHTML = `
-        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">warning</span>
+        <span class="material-symbols-outlined msym text-navy" style="font-size:14px">error</span>
         Sin localidades`;
       badge.classList.remove("bg-gold");
       badge.classList.add("bg-red-400", "text-white");
@@ -386,7 +357,6 @@
 
     renderList(all);
 
-    // Buscador: nombre, dirección, C.P., número, colonia, ciudad, pastor
     document.getElementById("searchInput").addEventListener("input", function() {
       const q = this.value.trim().toLowerCase();
       if (!q) { renderList(all); return; }
@@ -400,52 +370,5 @@
 
   init();
   </script>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const test = document.createElement("span");
-  test.className = "material-symbols-outlined";
-  test.innerHTML = "church";
-  test.style.position = "absolute";
-  test.style.visibility = "hidden";
-
-  document.body.appendChild(test);
-
-  const failed = test.offsetWidth < 10;
-
-  test.remove();
-
-  if (failed) {
-
-    const icons = {
-      church: "&#xe88a;",
-      home: "&#xe88a;",
-      location_on: "&#xe0c8;",
-      location_city: "&#xe7f1;",
-      person: "&#xe7fd;",
-      schedule: "&#xe8b5;",
-      search: "&#xe8b6;",
-      map: "&#xe55b;",
-      warning: "&#xe002;",
-      verified: "&#xe8e8;",
-      progress_activity: "&#xe9c8;"
-    };
-
-    document.querySelectorAll(".material-symbols-outlined")
-      .forEach(icon => {
-
-        const name = icon.textContent.trim();
-
-        if (icons[name]) {
-          icon.innerHTML = icons[name];
-          icon.classList.add("icon-fallback");
-        }
-
-      });
-
-  }
-
-});
-</script>
 </body>
 </html>
